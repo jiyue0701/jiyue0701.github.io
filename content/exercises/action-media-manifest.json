@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "fitness-action-assets.v2",
+  "status": "approved",
+  "purpose": "reusable_action_media",
+  "characterId": "wriothesley-coach",
+  "cameraPolicy": {
+    "sameAction": ["fixed_tripod", "fixed_crop", "fixed_floor_seams", "fixed_foot_contact_points", "fixed_equipment_position"],
+    "backgroundMustStayAligned": true,
+    "fullFrameMirror": false,
+    "crossfade": false,
+    "interpolation": "none"
+  },
+  "video": {
+    "primaryCodec": "libvpx-vp9",
+    "fallbackCodec": "libx264",
+    "fps": 30,
+    "format": ["webm", "mp4"],
+    "allActionsReady": true
+  },
+  "audio": {
+    "countRange": [1, 40],
+    "variantsPerCount": 2,
+    "playbackRule": "one-pure-number-at-each-rep-checkpoint",
+    "textRule": "numeric-only",
+    "directory": "/media/audio/"
+  },
+  "equipmentGroups": {
+    "徒手": ["bodyweight-squat", "bodyweight-glute-bridge", "reverse-lunge", "push-up", "wall-push-up", "dead-bug", "forearm-plank", "standing-calf-raise"],
+    "椅子辅助": ["chair-sit-to-stand", "chair-assisted-split-squat", "chair-knee-raise", "chair-supported-hip-abduction", "chair-hamstring-curl", "chair-seated-knee-extension", "seated-chair-march"],
+    "哑铃": ["goblet-squat", "romanian-deadlift", "glute-bridge", "dumbbell-reverse-lunge", "dumbbell-floor-press", "one-arm-dumbbell-row", "dumbbell-shoulder-press", "dumbbell-lateral-raise", "dumbbell-biceps-curl", "dumbbell-bent-over-row", "dumbbell-farmer-carry", "dumbbell-fly", "dumbbell-bench-press"]
+  },
+  "actions": {
+    "goblet-squat": {"status": "approved", "motionId": "goblet-squat.v1", "poster": "/media/actions/posters/goblet-squat-poster.png", "webm": "/media/actions/videos/goblet-squat.webm", "mp4": "/media/actions/videos/goblet-squat.mp4"},
+    "romanian-deadlift": {"status": "approved", "motionId": "romanian-deadlift.v1", "poster": "/media/actions/posters/dumbbell-romanian-deadlift-poster.png", "webm": "/media/actions/videos/romanian-deadlift.webm", "mp4": "/media/actions/videos/romanian-deadlift.mp4"},
+    "reverse-lunge": {"status": "approved", "motionId": "reverse-lunge.v1", "poster": "/media/actions/posters/reverse-lunge-poster.png", "webm": "/media/actions/videos/reverse-lunge.webm", "mp4": "/media/actions/videos/reverse-lunge.mp4", "sidePolicy": "dedicated-side-frames"},
+    "glute-bridge": {"status": "approved", "motionId": "glute-bridge.v1", "poster": "/media/actions/posters/dumbbell-glute-bridge-poster.png", "webm": "/media/actions/videos/glute-bridge.webm", "mp4": "/media/actions/videos/glute-bridge.mp4"},
+    "bodyweight-squat": {"status": "approved", "motionId": "bodyweight-squat.v1", "poster": "/media/actions/posters/bodyweight-squat-poster.png", "webm": "/media/actions/videos/bodyweight-squat.webm", "mp4": "/media/actions/videos/bodyweight-squat.mp4"},
+    "bodyweight-glute-bridge": {"status": "approved", "motionId": "bodyweight-glute-bridge.v1", "poster": "/media/actions/posters/bodyweight-glute-bridge-poster.png", "webm": "/media/actions/videos/bodyweight-glute-bridge.webm", "mp4": "/media/actions/videos/bodyweight-glute-bridge.mp4"},
+    "chair-sit-to-stand": {"status": "approved", "motionId": "chair-sit-to-stand.v1", "poster": "/media/actions/posters/chair-sit-to-stand-poster.png", "webm": "/media/actions/videos/chair-sit-to-stand.webm", "mp4": "/media/actions/videos/chair-sit-to-stand.mp4"},
+    "chair-assisted-split-squat": {"status": "approved", "motionId": "chair-assisted-split-squat.v1", "poster": "/media/actions/posters/chair-assisted-split-squat-poster.png", "webm": "/media/actions/videos/chair-assisted-split-squat.webm", "mp4": "/media/actions/videos/chair-assisted-split-squat.mp4", "sidePolicy": "dedicated-side-frame"},
+    "dumbbell-reverse-lunge": {"status": "approved", "motionId": "dumbbell-reverse-lunge.v1", "poster": "/media/actions/posters/dumbbell-reverse-lunge-poster.png", "webm": "/media/actions/videos/dumbbell-reverse-lunge.webm", "mp4": "/media/actions/videos/dumbbell-reverse-lunge.mp4", "sidePolicy": "dedicated-side-frames"},
+    "push-up": {"status": "approved", "motionId": "push-up.v1", "poster": "/media/actions/posters/push-up-poster.png", "webm": "/media/actions/videos/push-up.webm", "mp4": "/media/actions/videos/push-up.mp4"},
+    "one-arm-dumbbell-row": {"status": "approved", "motionId": "one-arm-dumbbell-row.v1", "poster": "/media/actions/posters/one-arm-dumbbell-row-poster.png", "webm": "/media/actions/videos/one-arm-dumbbell-row.webm", "mp4": "/media/actions/videos/one-arm-dumbbell-row.mp4"},
+    "dumbbell-shoulder-press": {"status": "approved", "motionId": "dumbbell-shoulder-press.v1", "poster": "/media/actions/posters/dumbbell-shoulder-press-poster.png", "webm": "/media/actions/videos/dumbbell-shoulder-press.webm", "mp4": "/media/actions/videos/dumbbell-shoulder-press.mp4"},
+    "dumbbell-lateral-raise": {"status": "approved", "motionId": "dumbbell-lateral-raise.v1", "poster": "/media/actions/posters/dumbbell-lateral-raise-poster.png", "webm": "/media/actions/videos/dumbbell-lateral-raise.webm", "mp4": "/media/actions/videos/dumbbell-lateral-raise.mp4"},
+    "dumbbell-biceps-curl": {"status": "approved", "motionId": "dumbbell-biceps-curl.v1", "poster": "/media/actions/posters/dumbbell-biceps-curl-poster.png", "webm": "/media/actions/videos/dumbbell-biceps-curl.webm", "mp4": "/media/actions/videos/dumbbell-biceps-curl.mp4", "sidePolicy": "alternating-side"},
+    "dead-bug": {"status": "approved", "motionId": "dead-bug.v1", "poster": "/media/actions/posters/dead-bug-poster.png", "webm": "/media/actions/videos/dead-bug.webm", "mp4": "/media/actions/videos/dead-bug.mp4"},
+    "forearm-plank": {"status": "approved", "motionId": "forearm-plank.v1", "poster": "/media/actions/posters/forearm-plank-poster.png", "webm": "/media/actions/videos/forearm-plank.webm", "mp4": "/media/actions/videos/forearm-plank.mp4"},
+    "chair-knee-raise": {"status": "approved", "motionId": "chair-knee-raise.v1", "poster": "/media/actions/posters/chair-knee-raise-poster.png", "webm": "/media/actions/videos/chair-knee-raise.webm", "mp4": "/media/actions/videos/chair-knee-raise.mp4", "sidePolicy": "alternating-side"},
+    "standing-calf-raise": {"status": "approved", "motionId": "standing-calf-raise.v1", "poster": "/media/actions/posters/standing-calf-raise-poster.png", "webm": "/media/actions/videos/standing-calf-raise.webm", "mp4": "/media/actions/videos/standing-calf-raise.mp4"},
+    "wall-push-up": {"status": "approved", "motionId": "wall-push-up.v1", "poster": "/media/actions/posters/wall-push-up-poster.png", "webm": "/media/actions/videos/wall-push-up.webm", "mp4": "/media/actions/videos/wall-push-up.mp4"},
+    "chair-supported-hip-abduction": {"status": "approved", "motionId": "chair-supported-hip-abduction.v1", "poster": "/media/actions/posters/chair-supported-hip-abduction-poster.png", "webm": "/media/actions/videos/chair-supported-hip-abduction.webm", "mp4": "/media/actions/videos/chair-supported-hip-abduction.mp4", "sidePolicy": "alternating-side"},
+    "chair-hamstring-curl": {"status": "approved", "motionId": "chair-hamstring-curl.v1", "poster": "/media/actions/posters/chair-hamstring-curl-poster.png", "webm": "/media/actions/videos/chair-hamstring-curl.webm", "mp4": "/media/actions/videos/chair-hamstring-curl.mp4", "sidePolicy": "alternating-side"},
+    "chair-seated-knee-extension": {"status": "approved", "motionId": "chair-seated-knee-extension.v1", "poster": "/media/actions/posters/chair-seated-knee-extension-poster.png", "webm": "/media/actions/videos/chair-seated-knee-extension.webm", "mp4": "/media/actions/videos/chair-seated-knee-extension.mp4", "sidePolicy": "alternating-side"},
+    "seated-chair-march": {"status": "approved", "motionId": "seated-chair-march.v1", "poster": "/media/actions/posters/seated-chair-march-poster.png", "webm": "/media/actions/videos/seated-chair-march.webm", "mp4": "/media/actions/videos/seated-chair-march.mp4", "sidePolicy": "alternating-side"},
+    "dumbbell-bent-over-row": {"status": "approved", "motionId": "dumbbell-bent-over-row.v1", "poster": "/media/actions/posters/dumbbell-bent-over-row-poster.png", "webm": "/media/actions/videos/dumbbell-bent-over-row.webm", "mp4": "/media/actions/videos/dumbbell-bent-over-row.mp4"},
+    "dumbbell-farmer-carry": {"status": "approved", "motionId": "dumbbell-farmer-carry.v1", "poster": "/media/actions/posters/dumbbell-farmer-carry-poster.png", "webm": "/media/actions/videos/dumbbell-farmer-carry.webm", "mp4": "/media/actions/videos/dumbbell-farmer-carry.mp4"},
+    "dumbbell-fly": {"status": "approved", "motionId": "dumbbell-fly.v1", "poster": "/media/actions/posters/dumbbell-fly-poster.png", "webm": "/media/actions/videos/dumbbell-fly.webm", "mp4": "/media/actions/videos/dumbbell-fly.mp4"},
+    "dumbbell-bench-press": {"status": "approved", "motionId": "dumbbell-bench-press.v1", "poster": "/media/actions/posters/dumbbell-bench-press-poster.png", "webm": "/media/actions/videos/dumbbell-bench-press.webm", "mp4": "/media/actions/videos/dumbbell-bench-press.mp4"},
+    "dumbbell-floor-press": {"status": "approved", "motionId": "dumbbell-floor-press.v1", "poster": "/media/actions/posters/dumbbell-floor-press-poster.png", "webm": "/media/actions/videos/dumbbell-floor-press.webm", "mp4": "/media/actions/videos/dumbbell-floor-press.mp4"}
+  },
+  "note": "所有动作均使用固定机位、正式 30 FPS WebM/MP4 和独立关键帧；左右动作使用专用左右帧，不做整帧镜像。播放器在每个动作节点播放纯数字计数音频。"
+}

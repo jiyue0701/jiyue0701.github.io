@@ -1,0 +1,254 @@
+{
+  "id": "plan.glute-leg-15min",
+  "version": 1,
+  "slug": "glute-leg-15min",
+  "name": "15 分钟臀腿基础训练",
+  "display_name": "臀腿基础 · 约 15 分钟",
+  "category": "臀腿",
+  "duration_seconds": 900,
+  "duration_label": "约 15 分钟",
+  "objective": "用四个基础动作覆盖蹲、髋铰链、单腿稳定和髋伸展，建立臀腿动作模式。",
+  "level": "入门",
+  "safety_note": "全程以可控动作幅度为准；出现疼痛、眩晕或无法维持姿势时停止并休息。",
+  "tracking": {
+    "mode": "status_only",
+    "allowed_statuses": ["completed", "skipped", "extra"],
+    "persist_scope": "只保存热身、主训练动作、休息和收操阶段的完成状态。",
+    "ui_must_not_record": [
+      "逐组重量",
+      "逐组次数",
+      "每组重量变化",
+      "每组次数变化"
+    ],
+    "timer_behavior": "可显示倒计时和动作提示，但计时结束后只更新状态，不生成重量或次数记录。"
+  },
+  "segments": [
+    {
+      "id": "warmup",
+      "kind": "warmup",
+      "title": "热身",
+      "duration_seconds": 180,
+      "status_key": "warmup",
+      "items": [
+        { "title": "髋关节环绕", "duration_seconds": 45, "instruction": "动作小而顺，保持躯干稳定。" },
+        { "title": "膝关节热身", "duration_seconds": 45, "instruction": "膝盖朝脚尖方向，轻柔活动。" },
+        { "title": "蹲姿动态髋部活动", "duration_seconds": 60, "instruction": "在舒适范围内下蹲、抬胸、打开髋部。" },
+        { "title": "徒手臀桥预热", "duration_seconds": 30, "instruction": "脚跟踩地，轻收臀，不追求高度。" }
+      ],
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "setup",
+      "kind": "transition",
+      "title": "器械与空间准备",
+      "duration_seconds": 30,
+      "status_key": "setup",
+      "instruction": "准备一只小哑铃、两只小哑铃和瑜伽垫，清出安全活动空间。",
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "main-round-1",
+      "kind": "main",
+      "title": "主训练 · 第 1 轮",
+      "duration_seconds": 225,
+      "round": 1,
+      "items": [
+        {
+          "sequence": 1,
+          "kind": "exercise",
+          "exercise_id": "exercise.goblet-squat",
+          "title": "高脚杯深蹲",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-1-goblet-squat",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 2,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-1-rest-1",
+          "instruction": "放松握力，调整呼吸。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 3,
+          "kind": "exercise",
+          "exercise_id": "exercise.romanian-deadlift",
+          "title": "小哑铃罗马尼亚硬拉",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-1-romanian-deadlift",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 4,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-1-rest-2",
+          "instruction": "放下哑铃，保持站姿或轻走动。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 5,
+          "kind": "exercise",
+          "exercise_id": "exercise.reverse-lunge",
+          "title": "后撤交替箭步蹲",
+          "duration_seconds": 45,
+          "side_mode": "左右交替",
+          "status_key": "main-round-1-reverse-lunge",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 6,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-1-rest-3",
+          "instruction": "调整站距，准备躺下。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 7,
+          "kind": "exercise",
+          "exercise_id": "exercise.glute-bridge",
+          "title": "小哑铃臀桥",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-1-glute-bridge",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        }
+      ],
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "round-rest",
+      "kind": "rest",
+      "title": "轮间休息",
+      "duration_seconds": 45,
+      "status_key": "round-rest",
+      "instruction": "完整休息，喝一小口水，确认下一轮动作幅度可控。",
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "main-round-2",
+      "kind": "main",
+      "title": "主训练 · 第 2 轮",
+      "duration_seconds": 225,
+      "round": 2,
+      "items": [
+        {
+          "sequence": 1,
+          "kind": "exercise",
+          "exercise_id": "exercise.goblet-squat",
+          "title": "高脚杯深蹲",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-2-goblet-squat",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 2,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-2-rest-1",
+          "instruction": "放松握力，调整呼吸。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 3,
+          "kind": "exercise",
+          "exercise_id": "exercise.romanian-deadlift",
+          "title": "小哑铃罗马尼亚硬拉",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-2-romanian-deadlift",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 4,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-2-rest-2",
+          "instruction": "放下哑铃，保持站姿或轻走动。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 5,
+          "kind": "exercise",
+          "exercise_id": "exercise.reverse-lunge",
+          "title": "后撤交替箭步蹲",
+          "duration_seconds": 45,
+          "side_mode": "左右交替",
+          "status_key": "main-round-2-reverse-lunge",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 6,
+          "kind": "rest",
+          "title": "休息",
+          "duration_seconds": 15,
+          "status_key": "main-round-2-rest-3",
+          "instruction": "调整站距，准备躺下。",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        },
+        {
+          "sequence": 7,
+          "kind": "exercise",
+          "exercise_id": "exercise.glute-bridge",
+          "title": "小哑铃臀桥",
+          "duration_seconds": 45,
+          "side_mode": "双侧",
+          "status_key": "main-round-2-glute-bridge",
+          "allowed_statuses": ["completed", "skipped", "extra"]
+        }
+      ],
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "final-rest",
+      "kind": "rest",
+      "title": "结束前休息",
+      "duration_seconds": 15,
+      "status_key": "final-rest",
+      "instruction": "慢慢起身，准备收操。",
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    },
+    {
+      "id": "cooldown",
+      "kind": "cooldown",
+      "title": "结束收操",
+      "duration_seconds": 180,
+      "status_key": "cooldown",
+      "items": [
+        { "title": "髋屈肌舒展", "duration_seconds": 60, "instruction": "左右侧平稳呼吸，不弹动。" },
+        { "title": "大腿后侧舒展", "duration_seconds": 60, "instruction": "保持背部自然延长，伸展到舒适张力。" },
+        { "title": "臀部四字拉伸", "duration_seconds": 60, "instruction": "左右侧均匀停留，缓慢回到站姿。" }
+      ],
+      "allowed_statuses": ["completed", "skipped", "extra"]
+    }
+  ],
+  "exercise_sources": [
+    {
+      "exercise_id": "exercise.goblet-squat",
+      "public_action_page": "https://www.calorietech.com/exercises/595f4d3aff247f33e297ea5a?gender=f"
+    },
+    {
+      "exercise_id": "exercise.romanian-deadlift",
+      "public_action_page": "https://www.calorietech.com/exercises/595f4e89ff247f33e297eb22?gender=f"
+    },
+    {
+      "exercise_id": "exercise.reverse-lunge",
+      "public_action_page": "https://www.calorietech.com/exercises/59f1d8b71e82742dde59ad83"
+    },
+    {
+      "exercise_id": "exercise.glute-bridge",
+      "public_action_page": "https://www.calorietech.com/exercises/586cfda2124816784056bf8c?gender=f"
+    }
+  ],
+  "media_policy": "动作视频、音频和海报均已由项目素材清单接入；不得下载或复制 Keep 页面媒体。"
+}

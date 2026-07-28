@@ -1,0 +1,45 @@
+# Generated/runtime workspaces
+work/
+artifacts/
+.pnpm-store/
+work/2026-07-25/cuda13-runtime/
+work/2026-07-25/flux2-klein-support/source/models/
+work/2026-07-25/flux2-klein-support/source/output/
+work/2026-07-25/flux2-klein-support/source/temp/
+work/2026-07-25/flux2-klein-support/source/user/
+work/2026-07-25/flux2-klein-support/logs/
+work/2026-07-25/video-verification/
+work/2026-07-25/wriothesley-voice/
+
+# Local media and model artifacts
+**/*.mp4
+**/*.mov
+**/*.webm
+**/*.wav
+**/*.flac
+**/*.ckpt
+**/*.safetensors
+**/*.gguf
+**/*.pth
+**/*.onnx
+**/*.exe
+
+# Keep the approved, app-shipped media under version control.
+!app/public/media/actions/videos/*.webm
+!app/public/media/actions/videos/*.mp4
+!app/public/media/audio/*.wav
+
+# Frontend build artifacts and local dependencies
+node_modules/
+dist/
+build/
+.vite/
+.cache/
+*.tsbuildinfo
+__pycache__/
+tools/run-vite.cmd
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example

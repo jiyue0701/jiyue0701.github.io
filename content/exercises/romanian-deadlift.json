@@ -1,0 +1,124 @@
+{
+  "id": "exercise.romanian-deadlift",
+  "version": 1,
+  "slug": "romanian-deadlift",
+  "name": "小哑铃罗马尼亚硬拉",
+  "display_name": "小哑铃罗马尼亚硬拉",
+  "category": "臀腿",
+  "equipment": {
+    "required": ["小哑铃 2 只"],
+    "alternatives": ["徒手髋铰链练习"]
+  },
+  "target_muscles": [
+    { "name": "臀大肌", "role": "主动力" },
+    { "name": "腘绳肌", "role": "主动力" },
+    { "name": "核心肌群", "role": "稳定" }
+  ],
+  "highlight_regions": ["臀部", "大腿后侧"],
+  "steps": [
+    {
+      "order": 1,
+      "phase": "准备",
+      "instruction": "双脚自然站立，双手握住小哑铃放在大腿前侧，拳眼相对。"
+    },
+    {
+      "order": 2,
+      "phase": "髋铰链",
+      "instruction": "臀部主动向后推，躯干随髋部前倾，膝盖只做被动的轻微弯曲。"
+    },
+    {
+      "order": 3,
+      "phase": "下放",
+      "instruction": "让哑铃贴近腿部下放至小腿中部或自己可控的最低点，保持腰背中立。"
+    },
+    {
+      "order": 4,
+      "phase": "挺胯",
+      "instruction": "短暂停顿后，用臀部发力挺胯起身回到站立，站直后保持核心收紧。"
+    }
+  ],
+  "breathing": {
+    "eccentric": "俯身下放时吸气",
+    "concentric": "挺胯起身时呼气",
+    "cue": "向后推髋时吸气，挺胯时呼气。"
+  },
+  "sensation": [
+    "下放过程中下背部保持稳定的张力，不应出现刺痛。",
+    "最低点臀部和大腿后侧有轻微牵拉感。",
+    "起身时臀部主动收缩，站直后臀部有挤压感。"
+  ],
+  "common_errors": [
+    {
+      "error": "主动屈膝下蹲，变成深蹲。",
+      "correction": "想象臀部向后找墙，减少屈膝幅度，优先保持髋铰链。"
+    },
+    {
+      "error": "弓背或抬头过度。",
+      "correction": "收紧核心，保持头颈与脊柱自然延长。"
+    },
+    {
+      "error": "哑铃远离身体。",
+      "correction": "让哑铃沿大腿和小腿前侧近身移动。"
+    },
+    {
+      "error": "站起时膝盖超伸或用腰部后仰。",
+      "correction": "站直即可，臀部收紧，不要把髋部向前顶过头。"
+    }
+  ],
+  "key_cues": [
+    "臀部向后，不是向下蹲。",
+    "背部保持中立。",
+    "哑铃贴近身体。",
+    "臀部发力挺胯。"
+  ],
+  "key_acceptance_frames": [
+    {
+      "id": "setup",
+      "label": "站立准备",
+      "acceptance": "双脚自然站立，哑铃贴近大腿，核心收紧，肩胛稳定。"
+    },
+    {
+      "id": "hinge",
+      "label": "髋部后移",
+      "acceptance": "臀部向后，膝盖微屈，躯干随髋部前倾，哑铃仍贴近身体。"
+    },
+    {
+      "id": "bottom",
+      "label": "最低点",
+      "acceptance": "腰背中立，大腿后侧有张力，深度仍在可控范围。"
+    },
+    {
+      "id": "lockout",
+      "label": "挺胯站直",
+      "acceptance": "髋部回到站立，臀部收缩，腰部没有后仰。"
+    }
+  ],
+  "default_tempo": {
+    "notation": "3-1-1-1",
+    "phase_order": ["俯身下放", "最低点停留", "挺胯起身", "站立稳定"],
+    "description": "下放 3 秒，最低点停 1 秒，挺胯 1 秒，站立稳定 1 秒。"
+  },
+  "media": {
+    "video": {
+      "status": "approved",
+      "webm": "/media/actions/videos/romanian-deadlift.webm",
+      "mp4": "/media/actions/videos/romanian-deadlift.mp4",
+      "fps": 30
+    },
+    "audio": {
+      "status": "approved",
+      "uri": "/media/audio/count-low-01.wav",
+      "rule": "纯数字 1-40，按动作节点播放"
+    },
+    "poster": {
+      "status": "approved",
+      "uri": "/media/actions/posters/dumbbell-romanian-deadlift-poster.png"
+    }
+  },
+  "source": {
+    "provider": "Keep",
+    "page_title": "小哑铃罗马尼亚硬拉_Keep",
+    "public_action_page": "https://www.calorietech.com/exercises/595f4e89ff247f33e297eb22?gender=f",
+    "usage": "仅作动作研究和来源追溯；不下载或复制页面中的视频、图片、音频。"
+  }
+}

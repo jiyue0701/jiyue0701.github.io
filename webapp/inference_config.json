@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "character_id": "wriothesley-coach",
+  "display_name": "莱欧斯利训练教练",
+  "status": "locked_asset_app_ready",
+  "identity": {
+    "runtime_sheet_uri": "/media/character-lock-sheet.png",
+    "acceptance": "two_soft_furry_black_gray_animal_ear_ornaments_left_and_right_plus_normal_human_ears; black_gray_hair; light_warm_neutral_skin; face_body_continuity; restrained_trapezius"
+  },
+  "character_lock": {
+    "hair": "black_charcoal_with_neutral_gray_streaks",
+    "face": "mature_official_wriothesley_face_feel; stylized_3d_anime_game_render",
+    "ears": "normal_human_ears_plus_exactly_two_soft_furry_black_gray_animal_ear_hair_ornaments_left_and_right",
+    "skin": "light_warm_neutral",
+    "neck": "black_band_only_no_necklace",
+    "body": "functional_athletic_coach; restrained_trapezius",
+    "scene": "charcoal_gray_gym_warm_neutral_light"
+  },
+  "media": {
+    "action_count": 28,
+    "poster_directory": "/media/actions/posters/",
+    "webm_directory": "/media/actions/videos/",
+    "mp4_directory": "/media/actions/videos/",
+    "fps": 30,
+    "all_actions_ready": true,
+    "side_policy": "dedicated_left_right_keyframes; never_full_frame_mirror"
+  },
+  "audio": {
+    "provider": "local_qwen3_tts_x_vector",
+    "directory": "/media/audio/",
+    "range": [1, 40],
+    "variants_per_count": 2,
+    "text_rule": "numeric_only",
+    "playback_rule": "one_number_at_each_motion_checkpoint"
+  },
+  "media_policy": {
+    "runtime_media_rule": "only_attach_individually_accepted_project_assets",
+    "safety_boundary": ["全裸", "暴露生殖器", "女性化身份漂移", "武器与束缚情趣配饰"]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "exercise.goblet-squat",
+  "version": 1,
+  "slug": "goblet-squat",
+  "name": "高脚杯深蹲",
+  "display_name": "小哑铃高脚杯深蹲",
+  "category": "臀腿",
+  "equipment": {
+    "required": ["小哑铃 1 只"],
+    "alternatives": ["徒手"]
+  },
+  "target_muscles": [
+    { "name": "臀大肌", "role": "主动力" },
+    { "name": "股四头肌", "role": "主动力" },
+    { "name": "核心肌群", "role": "稳定" }
+  ],
+  "highlight_regions": ["臀部", "大腿前侧"],
+  "steps": [
+    {
+      "order": 1,
+      "phase": "准备",
+      "instruction": "双脚分开约与肩同宽，收紧腹部核心，肩膀后缩下沉。"
+    },
+    {
+      "order": 2,
+      "phase": "持重",
+      "instruction": "双手握住一只小哑铃的一端，让哑铃贴近胸口。"
+    },
+    {
+      "order": 3,
+      "phase": "下蹲",
+      "instruction": "臀部缓慢向后并向下，蹲至自己可控的深度；脚跟保持着地，膝盖朝脚尖方向。"
+    },
+    {
+      "order": 4,
+      "phase": "起身",
+      "instruction": "短暂停顿后，以臀部和脚底发力站起，站直时夹紧臀部但不要过度挺腰。"
+    }
+  ],
+  "breathing": {
+    "eccentric": "下蹲时吸气",
+    "concentric": "站起时呼气",
+    "cue": "下去吸气，站起呼气。"
+  },
+  "sensation": [
+    "下蹲时髋部和大腿前侧有受控张力。",
+    "站起时臀部收缩发力，臀部感觉应比腰部更明显。"
+  ],
+  "common_errors": [
+    {
+      "error": "身体过度前倾，重心不稳。",
+      "correction": "哑铃贴近身体，胸口保持打开，减少深度直到重心可控。"
+    },
+    {
+      "error": "弯腰或腰背塌陷。",
+      "correction": "收紧核心，保持腰背中立，目视前方自然点。"
+    },
+    {
+      "error": "膝盖内扣。",
+      "correction": "膝盖主动朝脚尖方向打开，脚掌三点稳定着地。"
+    },
+    {
+      "error": "脚跟离地。",
+      "correction": "缩小站距或减少下蹲深度，让脚跟全程贴地。"
+    }
+  ],
+  "key_cues": [
+    "哑铃贴近身体。",
+    "臀部向后向下。",
+    "膝盖朝脚尖方向。",
+    "脚跟不要离地。"
+  ],
+  "key_acceptance_frames": [
+    {
+      "id": "setup",
+      "label": "准备姿势",
+      "acceptance": "双脚约与肩同宽，哑铃贴胸，核心收紧，脚掌稳定。"
+    },
+    {
+      "id": "bottom",
+      "label": "最低点",
+      "acceptance": "髋部下沉且腰背中立，膝盖朝脚尖，脚跟仍着地。"
+    },
+    {
+      "id": "lockout",
+      "label": "站直夹臀",
+      "acceptance": "身体回到直立，臀部收缩，膝盖不过度后顶。"
+    }
+  ],
+  "default_tempo": {
+    "notation": "3-1-1-0",
+    "phase_order": ["下蹲", "底部停留", "站起", "站立稳定"],
+    "description": "下蹲 3 秒，底部停 1 秒，站起 1 秒，顶部不额外停留。"
+  },
+  "media": {
+    "video": {
+      "status": "approved",
+      "webm": "/media/actions/videos/goblet-squat.webm",
+      "mp4": "/media/actions/videos/goblet-squat.mp4",
+      "fps": 30
+    },
+    "audio": {
+      "status": "approved",
+      "uri": "/media/audio/count-low-01.wav",
+      "rule": "纯数字 1-40，按动作节点播放"
+    },
+    "poster": {
+      "status": "approved",
+      "uri": "/media/actions/posters/goblet-squat-poster.png"
+    }
+  },
+  "source": {
+    "provider": "Keep",
+    "page_title": "小哑铃高脚杯深蹲_Keep",
+    "public_action_page": "https://www.calorietech.com/exercises/595f4d3aff247f33e297ea5a?gender=f",
+    "usage": "仅作动作研究和来源追溯；不下载或复制页面中的视频、图片、音频。"
+  }
+}

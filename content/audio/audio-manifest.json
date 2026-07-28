@@ -1,0 +1,22 @@
+{
+  "manifest_version": "2.0",
+  "created_at": "2026-07-28",
+  "asset_type": "zh-CN numeric workout count bank",
+  "generation_status": "approved",
+  "provider": "Qwen3-TTS local x-vector voice conditioning",
+  "voice_direction": "成熟男性、偏低沉、冷静克制；仅用于角色化数字计数，不标注为原演员本人音色。",
+  "reference_voice": {
+    "role": "character_voice_direction_reference",
+    "use_scope": "private_offline_r_and_d",
+    "used_for": ["pitch_range", "speaking_rate", "prosody", "articulation"]
+  },
+  "runtime": {
+    "directory": "/media/audio/",
+    "range": [1, 40],
+    "variants_per_count": 2,
+    "text_rule": "numeric-only",
+    "playback_rule": "speak one number at the start of each verified rep checkpoint",
+    "asr_gate": "SenseVoice normalized text equals the expected Arabic count"
+  },
+  "acceptance": ["没有鼓励语或动作长句", "不播放额外宣传语或长句", "每个数字与动作 checkpoint 对齐", "音频不缺号、不串号"]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "莱欧斯利训练教练",
+  "short_name": "训练教练",
+  "description": "一个移动端优先的个人臀腿训练计划应用。",
+  "start_url": "/?view=home",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf6",
+  "theme_color": "#f36c4e",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "开始训练", "short_name": "训练", "description": "直接打开当前训练计划", "url": "/?view=home" },
+    { "name": "调整计划", "short_name": "计划", "description": "选择动作并生成个人计划", "url": "/?view=plan" },
+    { "name": "我的记录", "short_name": "我的", "description": "查看本机训练记录", "url": "/?view=profile" }
+  ]
+}

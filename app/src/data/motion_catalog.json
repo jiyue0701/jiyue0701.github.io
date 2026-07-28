@@ -1,0 +1,1504 @@
+[
+  {
+    "id": "goblet-squat.v1",
+    "exercise": "goblet-squat",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/goblet-squat.webm",
+    "poster": "/media/actions/frames/goblet-squat-setup.png",
+    "frameUris": [
+      "/media/actions/frames/goblet-squat-setup.png",
+      "/media/actions/frames/goblet-squat-peak.png",
+      "/media/actions/frames/goblet-squat-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4.5,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "down",
+        "start": 0,
+        "end": 0.45
+      },
+      {
+        "id": "bottom",
+        "start": 0.45,
+        "end": 0.55
+      },
+      {
+        "id": "up",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示小哑铃高脚杯深蹲"
+    },
+    "webm": "/media/actions/videos/goblet-squat.webm",
+    "mp4": "/media/actions/videos/goblet-squat.mp4"
+  },
+  {
+    "id": "romanian-deadlift.v1",
+    "exercise": "romanian-deadlift",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/romanian-deadlift.webm",
+    "poster": "/media/actions/posters/dumbbell-romanian-deadlift-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-romanian-deadlift-setup.png",
+      "/media/actions/frames/dumbbell-romanian-deadlift-peak.png",
+      "/media/actions/frames/dumbbell-romanian-deadlift-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4.5,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "hinge",
+        "start": 0,
+        "end": 0.45
+      },
+      {
+        "id": "bottom",
+        "start": 0.45,
+        "end": 0.55
+      },
+      {
+        "id": "stand",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示小哑铃罗马尼亚硬拉"
+    },
+    "webm": "/media/actions/videos/romanian-deadlift.webm",
+    "mp4": "/media/actions/videos/romanian-deadlift.mp4"
+  },
+  {
+    "id": "reverse-lunge.v1",
+    "exercise": "reverse-lunge",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/reverse-lunge.webm",
+    "poster": "/media/actions/posters/reverse-lunge-poster.png",
+    "frameUris": [
+      "/media/actions/frames/reverse-lunge-setup.png",
+      "/media/actions/frames/reverse-lunge-peak.png",
+      "/media/actions/frames/reverse-lunge-setup.png",
+      "/media/actions/frames/reverse-lunge-peak-opposite.png",
+      "/media/actions/frames/reverse-lunge-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4.5,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "step-back",
+        "start": 0,
+        "end": 0.35
+      },
+      {
+        "id": "bottom",
+        "start": 0.35,
+        "end": 0.55
+      },
+      {
+        "id": "return",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      },
+      {
+        "time": 0.5,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示后撤箭步蹲"
+    },
+    "webm": "/media/actions/videos/reverse-lunge.webm",
+    "mp4": "/media/actions/videos/reverse-lunge.mp4"
+  },
+  {
+    "id": "glute-bridge.v1",
+    "exercise": "glute-bridge",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/glute-bridge.webm",
+    "poster": "/media/actions/posters/dumbbell-glute-bridge-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-glute-bridge-setup.png",
+      "/media/actions/frames/dumbbell-glute-bridge-peak.png",
+      "/media/actions/frames/dumbbell-glute-bridge-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 3.75,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "lower",
+        "start": 0,
+        "end": 0.42
+      },
+      {
+        "id": "squeeze",
+        "start": 0.42,
+        "end": 0.58
+      },
+      {
+        "id": "raise",
+        "start": 0.58,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示小哑铃臀桥"
+    },
+    "webm": "/media/actions/videos/glute-bridge.webm",
+    "mp4": "/media/actions/videos/glute-bridge.mp4"
+  },
+  {
+    "id": "bodyweight-squat.v1",
+    "exercise": "bodyweight-squat",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/bodyweight-squat.webm",
+    "poster": "/media/actions/posters/bodyweight-squat-poster.png",
+    "frameUris": [
+      "/media/actions/frames/bodyweight-squat-setup.png",
+      "/media/actions/frames/bodyweight-squat-peak.png",
+      "/media/actions/frames/bodyweight-squat-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 3.75,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "down",
+        "start": 0,
+        "end": 0.45
+      },
+      {
+        "id": "bottom",
+        "start": 0.45,
+        "end": 0.55
+      },
+      {
+        "id": "up",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示身体自重深蹲"
+    },
+    "webm": "/media/actions/videos/bodyweight-squat.webm",
+    "mp4": "/media/actions/videos/bodyweight-squat.mp4"
+  },
+  {
+    "id": "bodyweight-glute-bridge.v1",
+    "exercise": "bodyweight-glute-bridge",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/bodyweight-glute-bridge.webm",
+    "poster": "/media/actions/posters/bodyweight-glute-bridge-poster.png",
+    "frameUris": [
+      "/media/actions/frames/bodyweight-glute-bridge-setup.png",
+      "/media/actions/frames/bodyweight-glute-bridge-peak.png",
+      "/media/actions/frames/bodyweight-glute-bridge-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 3.75,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "lower",
+        "start": 0,
+        "end": 0.42
+      },
+      {
+        "id": "squeeze",
+        "start": 0.42,
+        "end": 0.58
+      },
+      {
+        "id": "raise",
+        "start": 0.58,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示身体自重臀桥"
+    },
+    "webm": "/media/actions/videos/bodyweight-glute-bridge.webm",
+    "mp4": "/media/actions/videos/bodyweight-glute-bridge.mp4"
+  },
+  {
+    "id": "chair-sit-to-stand.v1",
+    "exercise": "chair-sit-to-stand",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-sit-to-stand.webm",
+    "poster": "/media/actions/posters/chair-sit-to-stand-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-sit-to-stand-setup.png",
+      "/media/actions/frames/chair-sit-to-stand-approach.png",
+      "/media/actions/frames/chair-sit-to-stand-peak.png",
+      "/media/actions/frames/chair-sit-to-stand-approach.png",
+      "/media/actions/frames/chair-sit-to-stand-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4.5,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 6
+    },
+    "phases": [
+      {
+        "id": "sit",
+        "start": 0,
+        "end": 0.45
+      },
+      {
+        "id": "touch",
+        "start": 0.45,
+        "end": 0.58
+      },
+      {
+        "id": "stand",
+        "start": 0.58,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示椅子坐立"
+    },
+    "webm": "/media/actions/videos/chair-sit-to-stand.webm",
+    "mp4": "/media/actions/videos/chair-sit-to-stand.mp4"
+  },
+  {
+    "id": "chair-assisted-split-squat.v1",
+    "exercise": "chair-assisted-split-squat",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-assisted-split-squat.webm",
+    "poster": "/media/actions/posters/chair-assisted-split-squat-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-assisted-split-squat-setup.png",
+      "/media/actions/frames/chair-assisted-split-squat-peak.png",
+      "/media/actions/frames/chair-assisted-split-squat-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 5.625,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "lower",
+        "start": 0,
+        "end": 0.45
+      },
+      {
+        "id": "bottom",
+        "start": 0.45,
+        "end": 0.55
+      },
+      {
+        "id": "return",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示椅子辅助分腿蹲"
+    },
+    "webm": "/media/actions/videos/chair-assisted-split-squat.webm",
+    "mp4": "/media/actions/videos/chair-assisted-split-squat.mp4"
+  },
+  {
+    "id": "dumbbell-reverse-lunge.v1",
+    "exercise": "dumbbell-reverse-lunge",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-reverse-lunge.webm",
+    "poster": "/media/actions/posters/dumbbell-reverse-lunge-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-reverse-lunge-setup.png",
+      "/media/actions/frames/dumbbell-reverse-lunge-peak.png",
+      "/media/actions/frames/dumbbell-reverse-lunge-setup.png",
+      "/media/actions/frames/dumbbell-reverse-lunge-peak-opposite.png",
+      "/media/actions/frames/dumbbell-reverse-lunge-setup.png"
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 5.625,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 5
+    },
+    "phases": [
+      {
+        "id": "step-back",
+        "start": 0,
+        "end": 0.35
+      },
+      {
+        "id": "bottom",
+        "start": 0.35,
+        "end": 0.55
+      },
+      {
+        "id": "return",
+        "start": 0.55,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      },
+      {
+        "time": 0.5,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "教练演示哑铃后撤箭步蹲"
+    },
+    "webm": "/media/actions/videos/dumbbell-reverse-lunge.webm",
+    "mp4": "/media/actions/videos/dumbbell-reverse-lunge.mp4"
+  },
+  {
+    "id": "push-up.v1",
+    "exercise": "push-up",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/push-up.webm",
+    "poster": "/media/actions/posters/push-up-poster.png",
+    "frameUris": [
+      "/media/actions/frames/push-up-setup.png",
+      "/media/actions/frames/push-up-peak.png",
+      "/media/actions/frames/push-up-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "top",
+        "start": 0,
+        "end": 0.32
+      },
+      {
+        "id": "lower",
+        "start": 0.32,
+        "end": 0.58
+      },
+      {
+        "id": "bottom",
+        "start": 0.58,
+        "end": 0.68
+      },
+      {
+        "id": "press",
+        "start": 0.68,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "固定机位健身教练演示标准俯卧撑"
+    },
+    "webm": "/media/actions/videos/push-up.webm",
+    "mp4": "/media/actions/videos/push-up.mp4"
+  },
+  {
+    "id": "one-arm-dumbbell-row.v1",
+    "exercise": "one-arm-dumbbell-row",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/one-arm-dumbbell-row.webm",
+    "poster": "/media/actions/posters/one-arm-dumbbell-row-poster.png",
+    "frameUris": [
+      "/media/actions/frames/one-arm-dumbbell-row-setup.png",
+      "/media/actions/frames/one-arm-dumbbell-row-peak.png",
+      "/media/actions/frames/one-arm-dumbbell-row-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "hinge",
+        "start": 0,
+        "end": 0.3
+      },
+      {
+        "id": "pull",
+        "start": 0.3,
+        "end": 0.68
+      },
+      {
+        "id": "lower",
+        "start": 0.68,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "固定机位健身教练演示单臂哑铃划船"
+    },
+    "webm": "/media/actions/videos/one-arm-dumbbell-row.webm",
+    "mp4": "/media/actions/videos/one-arm-dumbbell-row.mp4"
+  },
+  {
+    "id": "dumbbell-shoulder-press.v1",
+    "exercise": "dumbbell-shoulder-press",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-shoulder-press.webm",
+    "poster": "/media/actions/posters/dumbbell-shoulder-press-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-shoulder-press-setup.png",
+      "/media/actions/frames/dumbbell-shoulder-press-peak.png",
+      "/media/actions/frames/dumbbell-shoulder-press-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 941,
+    "height": 1672,
+    "fps": 30,
+    "loopDuration": 4,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "rack",
+        "start": 0,
+        "end": 0.28
+      },
+      {
+        "id": "press",
+        "start": 0.28,
+        "end": 0.68
+      },
+      {
+        "id": "lower",
+        "start": 0.68,
+        "end": 1
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "固定机位健身教练演示哑铃肩上推举"
+    },
+    "webm": "/media/actions/videos/dumbbell-shoulder-press.webm",
+    "mp4": "/media/actions/videos/dumbbell-shoulder-press.mp4"
+  },
+  {
+    "id": "dumbbell-lateral-raise.v1",
+    "exercise": "dumbbell-lateral-raise",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-lateral-raise.webm",
+    "webm": "/media/actions/videos/dumbbell-lateral-raise.webm",
+    "mp4": "/media/actions/videos/dumbbell-lateral-raise.mp4",
+    "poster": "/media/actions/posters/dumbbell-lateral-raise-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-lateral-raise-setup.png",
+      "/media/actions/frames/dumbbell-lateral-raise-peak.png",
+      "/media/actions/frames/dumbbell-lateral-raise-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示站立哑铃侧平举"
+    },
+    "target": "肩部与三角肌中束"
+  },
+  {
+    "id": "dumbbell-biceps-curl.v1",
+    "exercise": "dumbbell-biceps-curl",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-biceps-curl.webm",
+    "webm": "/media/actions/videos/dumbbell-biceps-curl.webm",
+    "mp4": "/media/actions/videos/dumbbell-biceps-curl.mp4",
+    "poster": "/media/actions/posters/dumbbell-biceps-curl-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-biceps-curl-setup.png",
+      "/media/actions/frames/dumbbell-biceps-curl-peak.png",
+      "/media/actions/frames/dumbbell-biceps-curl-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示站立哑铃弯举"
+    },
+    "target": "上臂与肱二头肌"
+  },
+  {
+    "id": "dead-bug.v1",
+    "exercise": "dead-bug",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dead-bug.webm",
+    "webm": "/media/actions/videos/dead-bug.webm",
+    "mp4": "/media/actions/videos/dead-bug.mp4",
+    "poster": "/media/actions/posters/dead-bug-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dead-bug-setup.png",
+      "/media/actions/frames/dead-bug-peak.png",
+      "/media/actions/frames/dead-bug-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示死虫式"
+    },
+    "target": "核心稳定与腹横肌"
+  },
+  {
+    "id": "forearm-plank.v1",
+    "exercise": "forearm-plank",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/forearm-plank.webm",
+    "webm": "/media/actions/videos/forearm-plank.webm",
+    "mp4": "/media/actions/videos/forearm-plank.mp4",
+    "poster": "/media/actions/posters/forearm-plank-poster.png",
+    "frameUris": [
+      "/media/actions/frames/forearm-plank-setup.png",
+      "/media/actions/frames/forearm-plank-peak.png",
+      "/media/actions/frames/forearm-plank-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示前臂平板支撑"
+    },
+    "target": "核心稳定"
+  },
+  {
+    "id": "chair-knee-raise.v1",
+    "exercise": "chair-knee-raise",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-knee-raise.webm",
+    "webm": "/media/actions/videos/chair-knee-raise.webm",
+    "mp4": "/media/actions/videos/chair-knee-raise.mp4",
+    "poster": "/media/actions/posters/chair-knee-raise-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-knee-raise-setup.png",
+      "/media/actions/frames/chair-knee-raise-peak.png",
+      "/media/actions/frames/chair-knee-raise-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示椅子辅助抬膝"
+    },
+    "target": "髋屈肌与核心"
+  },
+  {
+    "id": "standing-calf-raise.v1",
+    "exercise": "standing-calf-raise",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/standing-calf-raise.webm",
+    "webm": "/media/actions/videos/standing-calf-raise.webm",
+    "mp4": "/media/actions/videos/standing-calf-raise.mp4",
+    "poster": "/media/actions/posters/standing-calf-raise-poster.png",
+    "frameUris": [
+      "/media/actions/frames/standing-calf-raise-setup.png",
+      "/media/actions/frames/standing-calf-raise-peak.png",
+      "/media/actions/frames/standing-calf-raise-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示站姿提踵"
+    },
+    "target": "小腿"
+  },
+  {
+    "id": "wall-push-up.v1",
+    "exercise": "wall-push-up",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/wall-push-up.webm",
+    "webm": "/media/actions/videos/wall-push-up.webm",
+    "mp4": "/media/actions/videos/wall-push-up.mp4",
+    "poster": "/media/actions/posters/wall-push-up-poster.png",
+    "frameUris": [
+      "/media/actions/frames/wall-push-up-setup.png",
+      "/media/actions/frames/wall-push-up-peak.png",
+      "/media/actions/frames/wall-push-up-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示墙壁俯卧撑"
+    },
+    "target": "胸部与三角肌前束"
+  },
+  {
+    "id": "chair-supported-hip-abduction.v1",
+    "exercise": "chair-supported-hip-abduction",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-supported-hip-abduction.webm",
+    "webm": "/media/actions/videos/chair-supported-hip-abduction.webm",
+    "mp4": "/media/actions/videos/chair-supported-hip-abduction.mp4",
+    "poster": "/media/actions/posters/chair-supported-hip-abduction-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-supported-hip-abduction-setup.png",
+      "/media/actions/frames/chair-supported-hip-abduction-peak.png",
+      "/media/actions/frames/chair-supported-hip-abduction-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 887,
+    "height": 887,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示椅子辅助站姿髋外展"
+    },
+    "target": "髋稳定与臀中肌"
+  },
+  {
+    "id": "chair-hamstring-curl.v1",
+    "exercise": "chair-hamstring-curl",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-hamstring-curl.webm",
+    "webm": "/media/actions/videos/chair-hamstring-curl.webm",
+    "mp4": "/media/actions/videos/chair-hamstring-curl.mp4",
+    "poster": "/media/actions/posters/chair-hamstring-curl-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-hamstring-curl-setup.png",
+      "/media/actions/frames/chair-hamstring-curl-peak.png",
+      "/media/actions/frames/chair-hamstring-curl-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示椅子辅助站姿腿弯举"
+    },
+    "target": "腿后侧"
+  },
+  {
+    "id": "chair-seated-knee-extension.v1",
+    "exercise": "chair-seated-knee-extension",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/chair-seated-knee-extension.webm",
+    "webm": "/media/actions/videos/chair-seated-knee-extension.webm",
+    "mp4": "/media/actions/videos/chair-seated-knee-extension.mp4",
+    "poster": "/media/actions/posters/chair-seated-knee-extension-poster.png",
+    "frameUris": [
+      "/media/actions/frames/chair-seated-knee-extension-setup.png",
+      "/media/actions/frames/chair-seated-knee-extension-peak.png",
+      "/media/actions/frames/chair-seated-knee-extension-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示椅子坐姿膝伸展"
+    },
+    "target": "大腿前侧"
+  },
+  {
+    "id": "seated-chair-march.v1",
+    "exercise": "seated-chair-march",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/seated-chair-march.webm",
+    "webm": "/media/actions/videos/seated-chair-march.webm",
+    "mp4": "/media/actions/videos/seated-chair-march.mp4",
+    "poster": "/media/actions/posters/seated-chair-march-poster.png",
+    "frameUris": [
+      "/media/actions/frames/seated-chair-march-setup.png",
+      "/media/actions/frames/seated-chair-march-peak.png",
+      "/media/actions/frames/seated-chair-march-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示椅子坐姿交替抬膝"
+    },
+    "target": "核心与髋屈肌"
+  },
+  {
+    "id": "dumbbell-bent-over-row.v1",
+    "exercise": "dumbbell-bent-over-row",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-bent-over-row.webm",
+    "webm": "/media/actions/videos/dumbbell-bent-over-row.webm",
+    "mp4": "/media/actions/videos/dumbbell-bent-over-row.mp4",
+    "poster": "/media/actions/posters/dumbbell-bent-over-row-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-bent-over-row-setup.png",
+      "/media/actions/frames/dumbbell-bent-over-row-peak.png",
+      "/media/actions/frames/dumbbell-bent-over-row-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示双臂哑铃俯身划船"
+    },
+    "target": "背部与上臂"
+  },
+  {
+    "id": "dumbbell-farmer-carry.v1",
+    "exercise": "dumbbell-farmer-carry",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-farmer-carry.webm",
+    "webm": "/media/actions/videos/dumbbell-farmer-carry.webm",
+    "mp4": "/media/actions/videos/dumbbell-farmer-carry.mp4",
+    "poster": "/media/actions/posters/dumbbell-farmer-carry-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-farmer-carry-setup.png",
+      "/media/actions/frames/dumbbell-farmer-carry-peak.png",
+      "/media/actions/frames/dumbbell-farmer-carry-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 887,
+    "height": 887,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示哑铃农夫走"
+    },
+    "target": "核心抗侧屈与握力"
+  },
+  {
+    "id": "dumbbell-fly.v1",
+    "exercise": "dumbbell-fly",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-fly.webm",
+    "webm": "/media/actions/videos/dumbbell-fly.webm",
+    "mp4": "/media/actions/videos/dumbbell-fly.mp4",
+    "poster": "/media/actions/posters/dumbbell-fly-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-fly-setup.png",
+      "/media/actions/frames/dumbbell-fly-peak.png",
+      "/media/actions/frames/dumbbell-fly-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 864,
+    "height": 910,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示哑铃飞鸟"
+    },
+    "target": "胸部与肩前束"
+  },
+  {
+    "id": "dumbbell-bench-press.v1",
+    "exercise": "dumbbell-bench-press",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-bench-press.webm",
+    "webm": "/media/actions/videos/dumbbell-bench-press.webm",
+    "mp4": "/media/actions/videos/dumbbell-bench-press.mp4",
+    "poster": "/media/actions/posters/dumbbell-bench-press-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-bench-press-setup.png",
+      "/media/actions/frames/dumbbell-bench-press-peak.png",
+      "/media/actions/frames/dumbbell-bench-press-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示哑铃卧推"
+    },
+    "target": "胸部与肱三头肌"
+  },
+  {
+    "id": "dumbbell-floor-press.v1",
+    "exercise": "dumbbell-floor-press",
+    "character": "wriothesley-coach",
+    "assetType": "video",
+    "loop": "/media/actions/videos/dumbbell-floor-press.webm",
+    "webm": "/media/actions/videos/dumbbell-floor-press.webm",
+    "mp4": "/media/actions/videos/dumbbell-floor-press.mp4",
+    "poster": "/media/actions/posters/dumbbell-floor-press-poster.png",
+    "frameUris": [
+      "/media/actions/frames/dumbbell-floor-press-setup.png",
+      "/media/actions/frames/dumbbell-floor-press-peak.png",
+      "/media/actions/frames/dumbbell-floor-press-setup.png"
+    ],
+    "frameDurations": [
+      1.25,
+      1.5,
+      1.25
+    ],
+    "width": 1024,
+    "height": 768,
+    "fps": 30,
+    "loopDuration": 4.0,
+    "loopSeam": {
+      "startFrame": 0,
+      "endFrame": 2
+    },
+    "phases": [
+      {
+        "id": "setup",
+        "start": 0.0,
+        "end": 0.31
+      },
+      {
+        "id": "working",
+        "start": 0.31,
+        "end": 0.69
+      },
+      {
+        "id": "return",
+        "start": 0.69,
+        "end": 1.0
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.0,
+        "type": "rep_checkpoint"
+      }
+    ],
+    "accessibility": {
+      "altText": "莱欧斯利训练教练演示哑铃地板卧推"
+    },
+    "target": "胸部与肱三头肌"
+  }
+]

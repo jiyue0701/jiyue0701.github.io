@@ -1,0 +1,124 @@
+{
+  "id": "exercise.glute-bridge",
+  "version": 1,
+  "slug": "glute-bridge",
+  "name": "小哑铃臀桥",
+  "display_name": "小哑铃臀桥",
+  "category": "臀腿",
+  "equipment": {
+    "required": ["小哑铃 1 只", "瑜伽垫"],
+    "alternatives": ["徒手"]
+  },
+  "target_muscles": [
+    { "name": "臀大肌", "role": "主动力" },
+    { "name": "腘绳肌", "role": "辅助" },
+    { "name": "核心肌群", "role": "稳定" }
+  ],
+  "highlight_regions": ["臀部", "大腿后侧"],
+  "steps": [
+    {
+      "order": 1,
+      "phase": "准备",
+      "instruction": "仰卧在瑜伽垫上，屈膝，双脚约与肩同宽，脚后跟着地并轻轻勾脚尖。"
+    },
+    {
+      "order": 2,
+      "phase": "持重",
+      "instruction": "双手握住一只小哑铃，放在下腹部并保持稳定；上背部和肩部支撑地面。"
+    },
+    {
+      "order": 3,
+      "phase": "抬起",
+      "instruction": "收缩臀部，把臀部抬离地面，直到肩部、髋部和膝盖形成稳定直线。"
+    },
+    {
+      "order": 4,
+      "phase": "停留与下落",
+      "instruction": "顶端短暂停顿并主动夹紧臀部，再控制臀部缓慢下落，不要用腰部过度挺起。"
+    }
+  ],
+  "breathing": {
+    "concentric": "臀部抬起时呼气",
+    "eccentric": "臀部下落时吸气",
+    "cue": "抬起呼气，下落吸气。"
+  },
+  "sensation": [
+    "感受臀部主动收缩，身体从上背部支撑逐渐抬起。",
+    "到顶端后臀部有明显的收缩挤压感。",
+    "大腿后侧可以有辅助张力，腰部不应成为主要发力点。"
+  ],
+  "common_errors": [
+    {
+      "error": "过度挺腰，腰部发力明显。",
+      "correction": "先收紧腹部再抬髋，抬到身体成直线即可，不追求更高。"
+    },
+    {
+      "error": "脚掌不稳或脚跟离地。",
+      "correction": "脚后跟持续压地，调整双脚距离到顶端小腿接近垂直。"
+    },
+    {
+      "error": "顶端没有停顿，靠惯性上下弹。",
+      "correction": "顶端停 1 秒并夹臀，再用 2 秒控制下落。"
+    },
+    {
+      "error": "膝盖向内塌。",
+      "correction": "膝盖朝脚尖方向，保持髋膝脚踝大致对齐。"
+    }
+  ],
+  "key_cues": [
+    "脚跟发力。",
+    "抬髋夹臀。",
+    "顶端停一下。",
+    "不要用腰过度挺起。"
+  ],
+  "key_acceptance_frames": [
+    {
+      "id": "setup",
+      "label": "仰卧准备",
+      "acceptance": "屈膝，双脚踩实，哑铃位于下腹部，上背部和肩部支撑。"
+    },
+    {
+      "id": "lift",
+      "label": "抬起过程",
+      "acceptance": "臀部主动抬起，膝盖朝脚尖，腰部没有突然拱起。"
+    },
+    {
+      "id": "top",
+      "label": "顶端直线",
+      "acceptance": "肩部、髋部、膝盖形成稳定直线，臀部夹紧，肋骨不过度外翻。"
+    },
+    {
+      "id": "lower",
+      "label": "缓慢还原",
+      "acceptance": "臀部控制下落，脚跟和肩部保持支撑，动作没有弹震。"
+    }
+  ],
+  "default_tempo": {
+    "notation": "2-1-2-0",
+    "phase_order": ["抬起", "顶端夹臀", "下落", "垫上稳定"],
+    "description": "抬起 2 秒，顶端夹臀停 1 秒，下落 2 秒，底部不额外停留。"
+  },
+  "media": {
+    "video": {
+      "status": "approved",
+      "webm": "/media/actions/videos/glute-bridge.webm",
+      "mp4": "/media/actions/videos/glute-bridge.mp4",
+      "fps": 30
+    },
+    "audio": {
+      "status": "approved",
+      "uri": "/media/audio/count-low-01.wav",
+      "rule": "纯数字 1-40，按动作节点播放"
+    },
+    "poster": {
+      "status": "approved",
+      "uri": "/media/actions/posters/dumbbell-glute-bridge-poster.png"
+    }
+  },
+  "source": {
+    "provider": "Keep",
+    "page_title": "小哑铃臀桥_Keep",
+    "public_action_page": "https://www.calorietech.com/exercises/586cfda2124816784056bf8c?gender=f",
+    "usage": "仅作动作研究和来源追溯；不下载或复制页面中的视频、图片、音频。"
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" role="img" aria-labelledby="title desc">
+  <title id="title">动作解析海报</title>
+  <desc id="desc">固定机位的训练动作解析海报模板；正式动作海报由各动作的 PNG 素材替换。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e232b"/><stop offset="1" stop-color="#4a5361"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9d5260"/><stop offset="1" stop-color="#553a57"/></linearGradient>
+  </defs>
+  <rect width="720" height="960" fill="url(#bg)"/>
+  <path d="M0 760H720" stroke="#86909d" stroke-opacity=".38" stroke-width="3"/>
+  <path d="M80 760L350 680L640 760" fill="none" stroke="#98a2ae" stroke-opacity=".18" stroke-width="4"/>
+  <rect x="55" y="56" width="610" height="122" rx="28" fill="#0f141b" fill-opacity=".48" stroke="#dbe3ec" stroke-opacity=".2"/>
+  <text x="88" y="105" fill="#f4aa91" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="4">MOVEMENT GUIDE</text>
+  <text x="88" y="146" fill="#fff" font-family="Arial, sans-serif" font-size="28" font-weight="700">动作解析海报</text>
+  <g transform="translate(360 260)" stroke="#f0c2ab" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="0" cy="0" r="54" fill="#c98272" stroke="none"/>
+    <path d="M-12 56C-52 82-74 140-67 208L-45 330"/>
+    <path d="M12 56C52 82 74 140 67 208L45 330"/>
+    <path d="M-67 208L-188 300L-222 420"/>
+    <path d="M67 208L188 300L222 420"/>
+    <path d="M-45 330L-92 520L-125 700"/>
+    <path d="M45 330L92 520L125 700"/>
+  </g>
+  <path d="M276 332C319 360 401 360 444 332L466 452C406 486 314 486 254 452Z" fill="url(#shirt)" fill-opacity=".86"/>
+  <rect x="74" y="816" width="572" height="72" rx="20" fill="#0f141b" fill-opacity=".55"/>
+  <text x="360" y="861" text-anchor="middle" fill="#e9edf1" font-family="Arial, sans-serif" font-size="20">按卡片查看标准动作 · 训练中只播计数</text>
+</svg>

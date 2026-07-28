@@ -1,0 +1,124 @@
+{
+  "id": "exercise.reverse-lunge",
+  "version": 1,
+  "slug": "reverse-lunge",
+  "name": "后撤交替箭步蹲",
+  "display_name": "后撤交替箭步蹲",
+  "category": "臀腿",
+  "equipment": {
+    "required": [],
+    "alternatives": ["两只小哑铃"]
+  },
+  "target_muscles": [
+    { "name": "臀大肌", "role": "前侧腿主动力" },
+    { "name": "股四头肌", "role": "前侧腿主动力" },
+    { "name": "腘绳肌", "role": "辅助" },
+    { "name": "核心肌群", "role": "稳定" }
+  ],
+  "highlight_regions": ["前侧臀部", "前侧大腿"],
+  "steps": [
+    {
+      "order": 1,
+      "phase": "准备",
+      "instruction": "躯干直立，收紧核心，目视前方，双脚自然分开；可徒手或双手持轻哑铃。"
+    },
+    {
+      "order": 2,
+      "phase": "后撤",
+      "instruction": "一侧腿向后撤步，前侧脚踩稳，后脚以前脚掌着地。"
+    },
+    {
+      "order": 3,
+      "phase": "下蹲",
+      "instruction": "沉髋屈膝下蹲至自己可控的深度，前侧小腿尽量稳定，膝盖朝脚尖方向。"
+    },
+    {
+      "order": 4,
+      "phase": "返回",
+      "instruction": "以前侧腿发力推地，沿原路返回站立，再换另一侧交替。"
+    }
+  ],
+  "breathing": {
+    "eccentric": "后撤并下蹲时吸气",
+    "concentric": "前侧腿发力返回时呼气",
+    "cue": "后撤吸气，前脚发力呼气。"
+  },
+  "sensation": [
+    "前侧腿的臀部和大腿前侧承担主要发力。",
+    "下蹲时前侧腿有受控张力，返回时能感到前脚踩地和臀部发力。"
+  ],
+  "common_errors": [
+    {
+      "error": "后撤距离过短，前侧膝盖压力过大。",
+      "correction": "后撤到能让前侧脚掌稳定、前侧小腿相对垂直的位置。"
+    },
+    {
+      "error": "身体前倾或后仰，重心晃动。",
+      "correction": "保持躯干直立和核心收紧，必要时缩小下蹲深度。"
+    },
+    {
+      "error": "前侧膝盖内扣或脚跟离地。",
+      "correction": "前侧膝盖朝脚尖方向，脚跟和脚掌持续踩稳地面。"
+    },
+    {
+      "error": "后侧腿承担过多重量。",
+      "correction": "把主要压力留在前侧脚，后脚只负责辅助平衡。"
+    }
+  ],
+  "key_cues": [
+    "前侧脚踩稳。",
+    "后撤再下蹲。",
+    "膝盖朝脚尖方向。",
+    "前侧腿发力返回。"
+  ],
+  "key_acceptance_frames": [
+    {
+      "id": "setup",
+      "label": "站立准备",
+      "acceptance": "躯干直立，核心收紧，双脚自然分开，重心稳定。"
+    },
+    {
+      "id": "step_back",
+      "label": "后撤落步",
+      "acceptance": "后脚落在身体后方，前脚全脚掌稳定，膝盖朝脚尖。"
+    },
+    {
+      "id": "bottom",
+      "label": "底部",
+      "acceptance": "前侧小腿相对稳定，髋膝受控下沉，躯干不晃动。"
+    },
+    {
+      "id": "return",
+      "label": "返回站立",
+      "acceptance": "前侧腿推地返回，身体重新直立，左右动作连续可控。"
+    }
+  ],
+  "default_tempo": {
+    "notation": "2-1-1-0",
+    "phase_order": ["后撤下蹲", "底部停留", "前脚发力返回", "站立稳定"],
+    "description": "后撤并下蹲 2 秒，底部停 1 秒，前脚发力返回 1 秒，站立不额外停留。"
+  },
+  "media": {
+    "video": {
+      "status": "approved",
+      "webm": "/media/actions/videos/reverse-lunge.webm",
+      "mp4": "/media/actions/videos/reverse-lunge.mp4",
+      "fps": 30
+    },
+    "audio": {
+      "status": "approved",
+      "uri": "/media/audio/count-low-01.wav",
+      "rule": "纯数字 1-40，左右节点交替播放"
+    },
+    "poster": {
+      "status": "approved",
+      "uri": "/media/actions/posters/reverse-lunge-poster.png"
+    }
+  },
+  "source": {
+    "provider": "Keep",
+    "page_title": "后撤交替箭步蹲_Keep",
+    "public_action_page": "https://www.calorietech.com/exercises/59f1d8b71e82742dde59ad83",
+    "usage": "仅作动作研究和来源追溯；不下载或复制页面中的视频、图片、音频。"
+  }
+}

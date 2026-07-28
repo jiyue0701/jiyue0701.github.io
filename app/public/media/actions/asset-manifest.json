@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "fitness-action-assets.v2",
+  "characterId": "wriothesley-coach",
+  "camera": {
+    "policy": "fixed-camera",
+    "canvas": "source-native-per-action",
+    "backgroundMustStayAligned": true,
+    "fullFrameMirror": false,
+    "crossfade": false,
+    "interpolation": "none"
+  },
+  "video": {
+    "webm": "libvpx-vp9",
+    "mp4": "libx264",
+    "fps": 30,
+    "allActionsReady": true
+  },
+  "audio": {
+    "countBank": "/media/audio/count-low-01.wav",
+    "countRange": [1, 40],
+    "variantsPerCount": 2,
+    "playbackRule": "one-pure-number-at-each-rep-checkpoint",
+    "textRule": "numeric-only"
+  },
+  "approvedFrameSequences": [
+    { "motionId": "goblet-squat.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "romanian-deadlift.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "reverse-lunge.v1", "stateOrder": ["setup", "left-peak", "setup", "right-peak", "setup"], "sidePolicy": "dedicated-side-frames", "motionReady": true },
+    { "motionId": "glute-bridge.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "bodyweight-squat.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "bodyweight-glute-bridge.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "chair-sit-to-stand.v1", "stateOrder": ["setup", "approach", "peak", "approach", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "chair-assisted-split-squat.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "single-side-dedicated-frame", "motionReady": true },
+    { "motionId": "dumbbell-reverse-lunge.v1", "stateOrder": ["setup", "left-peak", "setup", "right-peak", "setup"], "sidePolicy": "dedicated-side-frames", "motionReady": true },
+    { "motionId": "push-up.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "one-arm-dumbbell-row.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "supported-single-side", "motionReady": true },
+    { "motionId": "dumbbell-shoulder-press.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-lateral-raise.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-biceps-curl.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "dead-bug.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "forearm-plank.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "chair-knee-raise.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "standing-calf-raise.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "wall-push-up.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "chair-supported-hip-abduction.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "chair-hamstring-curl.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "chair-seated-knee-extension.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "seated-chair-march.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "alternating-side", "motionReady": true },
+    { "motionId": "dumbbell-bent-over-row.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-farmer-carry.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-fly.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-bench-press.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true },
+    { "motionId": "dumbbell-floor-press.v1", "stateOrder": ["setup", "peak", "setup"], "sidePolicy": "centered", "motionReady": true }
+  ],
+  "rejectedInterpolation": {
+    "source": "work/2026-07-26/action-library/interpolated",
+    "reason": "pixel-blend interpolation creates visible double exposure and is excluded from the workout player"
+  }
+}
