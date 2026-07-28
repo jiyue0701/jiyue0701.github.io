@@ -13,6 +13,7 @@
 - 所有文件通过 WAV、单声道、非静音、过零率和时长检查后才复制到 `app/public/media/audio/`。
 - 音频已去除 Qwen codec 产生的长尾静音，当前单条约 0.8–4.0 秒。
 - App 的 `countUris` 和 `countVariants` 已接入 1–40；训练只在 `rep_checkpoint` 节点播放数字。
+- 发布检查默认直接对 `app/public/media/audio/` 的正式文件运行 SenseVoice；模型实验目录只能通过 `COUNT_BANK_ROOT` 显式指定。
 
 ## 正式文件与替换规则
 

@@ -9,7 +9,10 @@ from src.transcriber import transcribe_audio
 
 
 ROOT = Path(r"D:\codex\projects\视频大模型")
-CANDIDATE_ROOT = Path(os.environ.get("COUNT_BANK_ROOT", str(ROOT / "work/2026-07-28/audio/cloned-candidates/qwen-xvector-pure")))
+# The release gate must inspect the files shipped by the app. A candidate
+# directory can still be selected explicitly with COUNT_BANK_ROOT for model
+# experiments, but it must never be the implicit release target.
+CANDIDATE_ROOT = Path(os.environ.get("COUNT_BANK_ROOT", str(ROOT / "app/public/media/audio")))
 RESULT_PATH = ROOT / "work/2026-07-28/audio/qwen-xvector-asr-results.json"
 EXPECTED = [str(index) for index in range(1, 41)]
 CHINESE_TO_ARABIC = {

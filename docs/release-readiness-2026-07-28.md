@@ -33,6 +33,8 @@
 ```text
 python tools/validate_motion_assets.py
 python tools/validate_app_assets.py
+# 使用 audio-voice-studio 的 SenseVoice 环境运行，默认检查正式音频目录
+<sensevoice-python> tools/validate_count_bank.py
 pnpm --dir app build
 ```
 

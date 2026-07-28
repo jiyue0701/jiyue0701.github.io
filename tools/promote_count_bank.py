@@ -14,12 +14,6 @@ PUBLIC_MANIFEST = ROOT / "app/public/media/audio/count-bank-manifest.json"
 
 
 def source_for(index: int, variant: str) -> tuple[Path, dict]:
-    results = json.loads(ASR_RESULTS.read_text(encoding="utf-8"))
-    records = [item for item in results if item["index"] == index and item["variant"] == variant]
-    passing = next((item for item in records if item["ok"]), None)
-    if passing:
-        return PURE / passing["file"], passing
-
     overrides = {
         (4, "v1"): (RETRY / "qwen-xvector-retry-04/count-low-04-v4.wav", "4", "retry-04-v4"),
         (4, "v2"): (RETRY / "qwen-xvector-retry-04/count-low-04-v4.wav", "4", "retry-04-v4-deduplicated"),
@@ -27,18 +21,26 @@ def source_for(index: int, variant: str) -> tuple[Path, dict]:
         (10, "v1"): (RETRY / "qwen-xvector-retry-10/count-low-10-v3.wav", "10", "retry-10-v3"),
         (10, "v2"): (RETRY / "qwen-xvector-retry-10/count-low-10-v6.wav", "10", "retry-10-v6"),
     }
-    path, normalized, source_label = overrides[(index, variant)]
-    record = {
-        "index": index,
-        "variant": variant,
-        "file": path.name,
-        "raw": "validated in retry bank",
-        "normalized": normalized,
-        "expected": normalized,
-        "ok": True,
-        "sourceLabel": source_label,
-    }
-    return path, record
+    if (index, variant) in overrides:
+        path, normalized, source_label = overrides[(index, variant)]
+        record = {
+            "index": index,
+            "variant": variant,
+            "file": path.name,
+            "raw": "validated in retry bank",
+            "normalized": normalized,
+            "expected": normalized,
+            "ok": True,
+            "sourceLabel": source_label,
+        }
+        return path, record
+
+    results = json.loads(ASR_RESULTS.read_text(encoding="utf-8"))
+    records = [item for item in results if item["index"] == index and item["variant"] == variant]
+    passing = next((item for item in records if item["ok"] and item["normalized"] == str(index)), None)
+    if not passing:
+        raise RuntimeError(f"no approved numeric source for {index} {variant}")
+    return PURE / passing["file"], passing
 
 
 def main() -> int:
@@ -56,7 +58,10 @@ def main() -> int:
                     "index": index,
                     "variant": variant,
                     "file": f"/media/audio/{destination.name}",
-                    "source": str(source),
+                    # Keep the published manifest portable. The original
+                    # local candidate path is useful during generation, but
+                    # it is not a valid reference once the app is deployed.
+                    "source": f"/media/audio/{destination.name}",
                     "normalizedRecognized": validation["normalized"],
                     "expected": str(index),
                     "asrPassed": True,
@@ -67,9 +72,9 @@ def main() -> int:
         "schemaVersion": "fitness-count-audio.v2",
         "status": "approved",
         "provider": "qwen3-tts",
-        "model": r"D:\codex\projects\audio-voice-studio\models\Qwen3-TTS-12Hz-0.6B-Base",
+        "model": "Qwen3-TTS-12Hz-0.6B-Base (local voice studio)",
         "voiceMode": "x-vector-only",
-        "reference": r"D:\codex\projects\audio-voice-studio\work\2026-07-20\gpt-sovits-eval\output\reference-first-sentence-6p2s.wav",
+        "reference": "local voice-studio reference (not included)",
         "asrGate": "SenseVoice normalized text must equal Arabic count 1..40; punctuation is removed only",
         "range": [1, 40],
         "variantsPerCount": 2,
