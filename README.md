@@ -57,9 +57,9 @@ pnpm --dir app build
 
 ## GitHub Pages
 
-仓库包含 `.github/workflows/deploy-pages.yml`。推送 `main` 后，GitHub Actions 会构建 `app/dist` 并部署 Pages。项目按用户站点仓库 `Panguiii.github.io` 配置，正式地址为：
+仓库包含 `.github/workflows/deploy-pages.yml`。推送 `main` 后，GitHub Actions 会构建 `app/dist` 并部署 Pages。项目按当前统一发布账号的用户站点仓库 `jiyue0701.github.io` 配置，正式地址为：
 
-<https://panguiii.github.io/>
+<https://jiyue0701.github.io/>
 
 如果改用项目站点仓库，需要同步调整 Vite `base` 与媒体路径；当前版本使用用户站点根路径，保证 `/media/...` 素材路径在手机浏览器中可用。
 
