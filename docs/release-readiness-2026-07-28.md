@@ -42,6 +42,6 @@ pnpm --dir app build
 
 ## 发布说明
 
-GitHub Pages 采用当前统一发布账号的用户站点仓库 `jiyue0701.github.io`，这样应用内的根路径媒体 `/media/...` 在 Pages 环境下仍然有效。首次部署由 `.github/workflows/deploy-pages.yml` 构建并发布 `app/dist`。
+GitHub Pages 采用当前统一发布账号的用户站点仓库 `jiyue0701.github.io`，这样应用内的根路径媒体 `/media/...` 在 Pages 环境下仍然有效。发布源已切换为 GitHub Actions，不使用 `main` 根目录的经典 Jekyll 渲染；部署由 `.github/workflows/deploy-pages.yml` 构建并发布 `app/dist`。
 
 当前审查仍属于桌面浏览器中的响应式验收；真实 iPhone 的音频自动播放策略和后台锁屏行为需要上线后用设备实测。
