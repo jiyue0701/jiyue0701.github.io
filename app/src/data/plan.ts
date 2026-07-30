@@ -34,7 +34,7 @@ const posterFileByExerciseId: Record<string, string> = {
 
 const posterUriFor = (exerciseId: string) => `/media/actions/posters/${posterFileByExerciseId[exerciseId] ?? 'standard-action-poster.svg'}`
 
-const actionMedia = (exerciseId: string, loopSeconds: number) => {
+const actionMedia = (exerciseId: string, loopSeconds: number, tipUri?: string) => {
   const motionId = `${exerciseId}.v1`
   const countUris = Array.from({ length: 40 }, (_, index) => `/media/audio/count-low-${String(index + 1).padStart(2, '0')}.wav`)
   const countVariants = countUris.map((uri) => [uri.replace('.wav', '-v2.wav')])
@@ -48,6 +48,7 @@ const actionMedia = (exerciseId: string, loopSeconds: number) => {
   coachingAudio: {
     countUris,
     countVariants,
+    tipUri,
   },
   }
 }
@@ -68,7 +69,7 @@ const assetMedia = (exerciseId?: string) => ({
     countVariants: Array.from({ length: 40 }, (_, index) => [`/media/audio/count-low-${String(index + 1).padStart(2, '0')}-v2.wav`]),
   },
 })
-const squatMedia = actionMedia('goblet-squat', 4.5)
+const squatMedia = actionMedia('goblet-squat', 4.5, '/media/audio/detail/goblet-squat-detail.wav')
 const bodyweightSquatMedia = actionMedia('bodyweight-squat', 3.75)
 const bodyweightGluteBridgeMedia = actionMedia('bodyweight-glute-bridge', 3.75)
 const reverseLungeMedia = actionMedia('reverse-lunge', 4.5)
@@ -658,6 +659,16 @@ export const planPresets: TrainingPlan[] = [
     estimatedCalories: 72,
     source: 'preset',
     exercises: exerciseCatalog.filter((exercise) => exercise.muscleGroups?.some((group) => ['胸部', '背部', '肩部', '手臂', '核心'].includes(group))),
+  },
+  {
+    id: 'core-shredder-foundation-v0-1',
+    title: '核心燃脂 · 腹部基础',
+    subtitle: '死虫式、平板支撑和抬膝，先练腹部控制与稳定。',
+    duration: 10,
+    rounds: 2,
+    estimatedCalories: 60,
+    source: 'preset',
+    exercises: exerciseCatalog.filter((exercise) => ['dead-bug', 'forearm-plank', 'chair-knee-raise'].includes(exercise.id)),
   },
   {
     id: 'full-body-foundation-v0-1',

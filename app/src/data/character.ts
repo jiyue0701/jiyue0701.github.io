@@ -2,7 +2,7 @@ import type { VoiceChoice } from '../types'
 
 export const characterAssets = {
   id: 'wriothesley-coach',
-  displayName: '莱欧斯利训练教练',
+  displayName: '教练',
   identityStatus: 'locked',
   lockSheetUri: '/media/character-lock-sheet.png',
   actionPosterUri: '/media/goblet-squat-setup.png',

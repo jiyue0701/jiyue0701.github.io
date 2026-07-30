@@ -231,7 +231,7 @@ export function materializeWorkoutPlanV2(
 
 const supportedPresetIds = new Set([
   'quick-lower-body-v0-1', 'bodyweight-home-v0-1', 'chair-friendly-v0-1', 'dumbbell-lower-body-v0-1',
-  'upper-core-foundation-v0-1', 'full-body-foundation-v0-1',
+  'upper-core-foundation-v0-1', 'core-shredder-foundation-v0-1', 'full-body-foundation-v0-1',
 ])
 
 function isLegacyPlan(value: unknown): value is TrainingPlan {

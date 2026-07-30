@@ -57,6 +57,7 @@ const tabLabels: Record<Tab, string> = { home: '首页', plan: '计划', calenda
 const tabIconComponents = { home: House, plan: ListChecks, calendar: CalendarDots, profile: UserCircle }
 const workoutPlanUiContext = { defaultPlan: todayPlan, exerciseCatalog }
 let activeCueAudio: HTMLAudioElement | null = null
+let trainingCueAudio: HTMLAudioElement | null = null
 const cueText = ''
 
 function createPersonalPlanId(prefix: string) {
@@ -73,16 +74,39 @@ function speakCue(_choice: VoiceChoice, _text = '', _useAsset = true, _fallbackU
 
 function stopActiveCueAudio() {
   activeCueAudio?.pause()
+  if (activeCueAudio) activeCueAudio.currentTime = 0
   activeCueAudio = null
+}
+
+function getTrainingCueAudio() {
+  if (!trainingCueAudio) {
+    trainingCueAudio = new Audio()
+    trainingCueAudio.preload = 'auto'
+    trainingCueAudio.setAttribute('playsinline', '')
+  }
+  return trainingCueAudio
+}
+
+function primeTrainingAudio() {
+  for (let value = 1; value <= 12; value += 1) {
+    const padded = String(value).padStart(2, '0')
+    for (const uri of [`/media/audio/count-low-${padded}.wav`, `/media/audio/count-low-${padded}-v2.wav`]) {
+      const audio = new Audio(uri)
+      audio.preload = 'auto'
+      audio.load()
+    }
+  }
 }
 
 function speakRepCount(choice: VoiceChoice, count: number, uri?: string, variants: string[] = [], variantIndex = 0, onStatusChange?: (status: AudioStatus) => void) {
   const sources = [uri, ...variants].filter((value): value is string => Boolean(value))
   const selectedUri = sources.length ? sources[variantIndex % sources.length] : undefined
   if (selectedUri) {
-    const audio = new Audio(selectedUri)
+    const audio = getTrainingCueAudio()
+    audio.pause()
+    audio.src = selectedUri
+    audio.currentTime = 0
     audio.playbackRate = choice.playbackRate ?? 1
-    stopActiveCueAudio()
     activeCueAudio = audio
     audio.onplay = () => onStatusChange?.('ready')
     audio.onended = () => { if (activeCueAudio === audio) activeCueAudio = null }
@@ -108,14 +132,20 @@ function speakWorkoutNumber(choice: VoiceChoice, event: WorkoutVoiceEvent, onSta
 
 async function unlockTrainingAudio(choice: VoiceChoice) {
   if (!choice.audioUri) return false
-  const audio = new Audio(choice.audioUri)
+  const audio = getTrainingCueAudio()
+  audio.src = choice.audioUri
+  audio.preload = 'auto'
   audio.volume = 0.01
+  audio.playbackRate = choice.playbackRate ?? 1
   try {
     await audio.play()
     audio.pause()
     audio.currentTime = 0
+    audio.volume = 1
+    primeTrainingAudio()
     return true
   } catch {
+    audio.volume = 1
     return false
   }
 }
@@ -307,6 +337,7 @@ function App() {
   const startWorkout = (exercise?: Exercise) => {
     void exercise
     setWorkoutDetailOpen(false)
+    setAudioStatus('idle')
     void enableTrainingAudio()
     setScreen('workout')
   }
@@ -564,9 +595,9 @@ function PageHeader({ eyebrow, title, right }: { eyebrow?: string; title: string
 function HomeScreen({ activePlan, lastSession, onStart, onOpenPlan, onOpenDetail }: { activePlan: TrainingPlan; lastSession: CompletedSession | null; onStart: () => void; onOpenPlan: () => void; onOpenDetail: (exercise: Exercise, openerId?: string) => void }) {
   const previewExercises = activePlan.exercises.slice(0, 3)
   return <div className="page page-home">
-    <PageHeader eyebrow="今天也留一点时间给自己" title="跟着教练，稳稳练起来" right={<div className="avatar" aria-label="莱欧斯利教练">LC</div>} />
+    <PageHeader eyebrow="今天也留一点时间给自己" title="跟着教练，稳稳练起来" right={<div className="avatar avatar--logo" aria-label="教练"><img src="/icon-192.png" alt="" /></div>} />
     <section className="hero-card hero-card--media">
-      <img src={characterAssets.actionPosterUri} alt="莱欧斯利训练教练在健身房示范高脚杯深蹲" />
+      <img src={characterAssets.actionPosterUri} alt="教练在健身房示范高脚杯深蹲" />
       <div className="hero-card__overlay" />
       <div className="hero-card__copy"><span className="soft-label">TODAY'S FOCUS</span><h2>{activePlan.title}</h2><p>{activePlan.subtitle}</p><div className="hero-meta"><span><Clock size={15} aria-hidden="true" />约 {activePlan.duration} 分钟</span><span><Barbell size={15} aria-hidden="true" />{activePlan.exercises.length} 个动作</span></div></div>
       <span className="lock-chip">今日教练</span>
@@ -663,7 +694,6 @@ function MotionPlayer({ workoutExercise, exercise, elapsedMs, paused, onReady }:
   const cycleProgress = cycleDurationMs ? (elapsedMs % cycleDurationMs) / cycleDurationMs : 0
   const frameUris = motion.frameUris ?? []
   const frameIndex = frameUris.length ? Math.min(frameUris.length - 1, Math.floor(cycleProgress * frameUris.length)) : 0
-  const phase = motion.phases.find((item) => cycleProgress >= item.start && cycleProgress < item.end)?.id ?? motion.phases[0]?.id ?? 'cycle'
   const videoUri = workoutExercise.videoUri
   const hasFormalVideo = Boolean(videoUri || workoutExercise.videoFallbackUri)
 
@@ -693,9 +723,7 @@ function MotionPlayer({ workoutExercise, exercise, elapsedMs, paused, onReady }:
   }, [paused, workoutExercise.exerciseId])
 
   return <div className="motion-player">
-    <div className="motion-player__rail motion-player__rail--start"><span>{paused ? '画面已暂停' : `动作阶段 · ${phase}`}</span></div>
     <div className="motion-player__video-slot">{hasFormalVideo ? <video ref={videoRef} poster={workoutExercise.posterUri} autoPlay={!paused} loop muted playsInline preload="auto" onCanPlay={onReady} onLoadedMetadata={onReady}><source src={videoUri} type="video/webm" />{workoutExercise.videoFallbackUri && <source src={workoutExercise.videoFallbackUri} type="video/mp4" />}</video> : frameUris.length ? <img src={paused ? workoutExercise.posterUri : frameUris[frameIndex]} alt={motion.accessibility.altText} /> : <img src={workoutExercise.posterUri} alt={`${exercise.name}动作示范`} />}</div>
-    <div className="motion-player__rail motion-player__rail--end"><span>{hasFormalVideo ? '动作节奏演示' : frameUris.length ? '固定机位逐帧演示' : '预渲染循环'}</span></div>
   </div>
 }
 
@@ -715,8 +743,28 @@ function WorkoutMediaPreloader({ exercises, onReady, onError }: { exercises: Wor
   </div>
 }
 
+function DetailNarration({ exercise }: { exercise: Exercise }) {
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [audioState, setAudioState] = useState<'idle' | 'playing' | 'blocked'>('idle')
+  const uri = exercise.media.coachingAudio?.tipUri
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio || !uri) return undefined
+    audio.currentTime = 0
+    void audio.play().then(() => setAudioState('playing')).catch(() => setAudioState('blocked'))
+    return () => {
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [uri])
+
+  if (!uri) return null
+  return <section className="detail-narration" aria-label="动作讲解语音"><div><strong>教练动作讲解</strong><small>{audioState === 'blocked' ? '浏览器阻止了自动播放，请点播放' : '进入详情后自动尝试播放'}</small></div><audio ref={audioRef} src={uri} controls preload="metadata" onPlay={() => setAudioState('playing')} onPause={() => setAudioState('idle')} onError={() => setAudioState('blocked')} /></section>
+}
+
 function DetailScreen({ exercise, backLabel, onBack, onStart, startLabel = '开始 15 分钟跟练', titleId = 'detail-title', cueId = 'detail-cue' }: { exercise: Exercise; backLabel: string; onBack: () => void; onStart: () => void; startLabel?: string; titleId?: string; cueId?: string }) {
-  return <div className="page page-detail"><button className="back-link" onClick={onBack} autoFocus><CaretLeft size={18} aria-hidden="true" />{backLabel}</button><div className="detail-media">{exercise.media.videoUri ? <video src={exercise.media.videoUri} poster={exercise.media.posterUri} controls loop playsInline /> : exercise.media.posterUri ? <img src={exercise.media.posterUri} alt={`${exercise.name}动作海报`} /> : <ActionPoster exercise={exercise} />}<span className="detail-badge">动作解析</span></div><div className={`target-pill target-pill--${exercise.targetTone}`}>{exercise.target}</div><h1 id={titleId}>{exercise.name}</h1><p className="cue-line" id={cueId}>{exercise.cue}</p><section className="detail-section"><h2>动作步骤</h2><ol>{exercise.steps.map((step) => <li key={step}>{step}</li>)}</ol></section><section className="detail-section detail-section--soft"><h2>呼吸与提醒</h2><p><strong>呼吸：</strong>{exercise.breathing}</p><ul>{exercise.reminders.map((reminder) => <li key={reminder}>{reminder}</li>)}</ul></section><p className="detail-audio-note">训练时只播放低沉版计数口令；标准动作和详细提醒都在本页查看，避免训练中反复播报。</p><button className="primary-button sticky-action" onClick={onStart}><span>{startLabel}</span>{startLabel === '开始 15 分钟跟练' && <ArrowRight size={20} aria-hidden="true" />}</button></div>
+  return <div className="page page-detail"><button className="back-link" onClick={onBack} autoFocus><CaretLeft size={18} aria-hidden="true" />{backLabel}</button><div className="detail-media">{exercise.media.videoUri ? <video src={exercise.media.videoUri} poster={exercise.media.posterUri} controls loop playsInline /> : exercise.media.posterUri ? <img src={exercise.media.posterUri} alt={`${exercise.name}动作海报`} /> : <ActionPoster exercise={exercise} />}<span className="detail-badge">动作解析</span></div><div className={`target-pill target-pill--${exercise.targetTone}`}>{exercise.target}</div><h1 id={titleId}>{exercise.name}</h1><p className="cue-line" id={cueId}>{exercise.cue}</p><DetailNarration exercise={exercise} /><section className="detail-section"><h2>动作步骤</h2><ol>{exercise.steps.map((step) => <li key={step}>{step}</li>)}</ol></section><section className="detail-section detail-section--soft"><h2>呼吸与提醒</h2><p><strong>呼吸：</strong>{exercise.breathing}</p><ul>{exercise.reminders.map((reminder) => <li key={reminder}>{reminder}</li>)}</ul></section><p className="detail-audio-note">训练中自动跟随动作节拍播放数字；完整动作要领和讲解语音在这里查看。</p><button className="primary-button sticky-action" onClick={onStart}><span>{startLabel}</span>{startLabel === '开始 15 分钟跟练' && <ArrowRight size={20} aria-hidden="true" />}</button></div>
 }
 
 function WorkoutDetailOverlay({ exercise, onClose }: { exercise: Exercise; onClose: () => void }) {
@@ -767,7 +815,8 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
   const workoutExercise = guidedWorkoutPlanV2.exercises[segment.exerciseIndex ?? 0] ?? guidedWorkoutPlanV2.exercises[0]
   const exercise = exerciseCatalog.find((item) => item.id === workoutExercise.exerciseId) ?? todayPlan.exercises[0]
   const isActiveSegment = segment.kind === 'active'
-  const isResting = segment.kind === 'transition_rest' || segment.kind === 'round_rest' || segment.kind === 'cooldown'
+  const isTransitionRest = segment.kind === 'transition_rest'
+  const isResting = segment.kind === 'round_rest' || segment.kind === 'cooldown'
   const isPreparing = segment.kind === 'preparation'
   const paused = runtime.state === 'paused' || runtime.state === 'detail'
   const canOpenDetail = runtime.state === 'active' || runtime.state === 'paused' || runtime.state === 'detail'
@@ -803,11 +852,11 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
   }
 
   const media = isResting
-    ? <div className="rest-placeholder"><span>{segment.kind === 'cooldown' ? 'COOL DOWN' : 'REST'}</span><strong>{segment.kind === 'cooldown' ? '整理与恢复' : '休息一下'}</strong><small>{segment.kind === 'cooldown' ? '保持轻松呼吸，训练即将完成' : '下一动作即将开始'}</small></div>
-    : <MotionPlayer workoutExercise={workoutExercise} exercise={exercise} elapsedMs={isActiveSegment ? snapshot.segmentElapsedMs : 0} paused={!isActiveSegment || runtime.state !== 'active'} />
+    ? <div className="rest-placeholder"><span>{segment.kind === 'cooldown' ? 'COOL DOWN' : 'REST'}</span><strong>{segment.kind === 'cooldown' ? '整理与恢复' : '休息一下'}</strong><small>{segment.kind === 'cooldown' ? '保持轻松呼吸，训练即将完成' : '下一轮即将开始'}</small></div>
+    : <MotionPlayer workoutExercise={workoutExercise} exercise={exercise} elapsedMs={isActiveSegment || isPreparing || isTransitionRest ? snapshot.segmentElapsedMs : 0} paused={runtime.state === 'paused' || runtime.state === 'detail'} />
 
   let primaryValue = String(snapshot.remainingSeconds)
-  let primaryLabel = isPreparing ? '准备倒计时' : isResting ? '休息倒计时' : '剩余秒数'
+  let primaryLabel = isPreparing || isTransitionRest ? '开始倒计时' : isResting ? '休息倒计时' : '剩余秒数'
   if (isActiveSegment && workoutExercise.countingMode === 'repetition') {
     primaryValue = `${runtime.completedCount}/${workoutExercise.targetCount ?? 0}`
     primaryLabel = '跟练计数'
@@ -821,8 +870,8 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
     primaryLabel = '剩余秒数'
   }
 
-  const captionTitle = isPreparing ? '准备开始' : segment.kind === 'cooldown' ? '整理与恢复' : isResting ? '准备下一个动作' : exercise.name
-  const captionCue = isPreparing ? '动作媒体已就绪，最后 3 秒只播放数字。' : segment.kind === 'cooldown' ? '放松呼吸，让心率逐步恢复。' : isResting ? '放松呼吸，下一片段会由主时钟自动开始。' : exercise.cue
+  const captionTitle = isPreparing ? `第一个动作 · ${exercise.name}` : isTransitionRest ? `下一个动作 · ${exercise.name}` : segment.kind === 'cooldown' ? '整理与恢复' : isResting ? '下一轮准备' : exercise.name
+  const captionCue = isPreparing ? '站好位置，3、2、1 后开始。' : isTransitionRest ? '下一个动作准备好，3、2、1 后开始。' : segment.kind === 'cooldown' ? '放松呼吸，让心率逐步恢复。' : exercise.cue
   const canSkip = (runtime.state === 'active' || runtime.state === 'rest') && segment.kind !== 'cooldown'
   const canPause = runtime.state === 'preparing' || runtime.state === 'active' || runtime.state === 'rest' || runtime.state === 'paused'
 
@@ -837,16 +886,13 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
       <div className="workout-layout">
         <div className="workout-visual-pane">
           <div className="workout-stage">
-            <div className="workout-stage__topline"><span>{runtime.state === 'idle' ? '动作媒体准备中' : isPreparing ? '会话准备' : isResting ? segment.kind === 'round_rest' ? '轮间休息' : segment.kind === 'cooldown' ? '整理恢复' : '动作间休息' : `动作 ${exerciseNumber} / ${guidedWorkoutPlanV2.exercises.length}`}</span><span>{runtime.state === 'idle' ? '加载不计入计划' : `${snapshot.remainingSeconds} 秒`}</span></div>
             <div className="workout-stage__media">{media}</div>
           </div>
         </div>
         <div className="workout-control-pane">
-          <button id="workout-detail-trigger" type="button" className="workout-stage__caption workout-stage__caption--button" onClick={handleOpenDetail} disabled={!canOpenDetail} aria-label={canOpenDetail ? '打开动作详情' : captionTitle}><span><span className={`target-pill target-pill--${isResting || isPreparing ? 'gold' : exercise.targetTone}`}>{isPreparing ? '30 秒准备' : isResting ? '恢复呼吸' : exercise.target}</span><strong>{captionTitle}</strong><small>{mediaFailed && runtime.state === 'idle' ? '动作媒体加载失败，请检查网络后重新进入训练。' : captionCue}</small></span><span className="workout-timer"><strong>{String(snapshot.remainingSeconds).padStart(2, '0')}</strong><span>秒</span></span></button>
-          <div className="workout-stage__status"><span className="live-dot" />{runtime.state === 'idle' ? '四个动作媒体全部就绪后才开始计时' : isResting ? '休息结束后由同一主时钟自动继续' : isPreparing ? '准备结束后动作从 0 开始' : '视频、倒计时、计数与语音共用主时钟'}</div>
+          <button id="workout-detail-trigger" type="button" className="workout-stage__caption workout-stage__caption--button" onClick={handleOpenDetail} disabled={!canOpenDetail} aria-label={canOpenDetail ? '打开动作详情' : captionTitle}><span><span className={`target-pill target-pill--${exercise.targetTone}`}>{isResting ? '恢复呼吸' : exercise.target}</span><strong>{captionTitle}</strong><small>{mediaFailed && runtime.state === 'idle' ? '动作媒体加载失败，请检查网络后重新进入训练。' : captionCue}</small></span><span className="workout-timer"><strong>{String(snapshot.remainingSeconds).padStart(2, '0')}</strong><span>秒</span></span></button>
           <div className="workout-live-copy"><div><strong>{primaryValue}</strong><span>{primaryLabel}</span></div><div><strong>{paused ? '暂停' : runtime.state === 'idle' ? '加载' : isPreparing ? '准备' : isResting ? '休息' : '跟练'}</strong><span>当前状态</span></div><div><strong>{exerciseNumber}/{guidedWorkoutPlanV2.exercises.length}</strong><span>本轮动作</span></div></div>
-          {audioStatus !== 'ready' && runtime.state !== 'idle' && segment.kind !== 'cooldown' && <button className="audio-enable-button" onClick={onEnableAudio}>{audioStatus === 'blocked' ? '声音未开启 · 点此重试' : '点此开启计数声音'}</button>}
-          {paused && <div className="pause-banner" role="status" aria-live="polite"><span>{runtime.pauseReason === 'background' ? '返回前台后仍保持暂停' : runtime.pauseReason === 'detail_return' ? '已从详情返回，请手动继续' : '视频、倒计时、计数与语音均已冻结'}</span></div>}
+          {audioStatus === 'blocked' && runtime.state !== 'idle' && segment.kind !== 'cooldown' && <button className="audio-enable-button" onClick={onEnableAudio}>声音未开启 · 点此重试</button>}
           <div className="workout-live-actions"><button className="secondary-button" onClick={clock.skip} disabled={!canSkip}>{isResting ? '跳过休息' : '跳过'}</button><button className="primary-button" onClick={handlePause} disabled={!canPause}>{runtime.state === 'paused' ? '继续训练' : '暂停训练'}</button></div>
         </div>
       </div>
@@ -878,7 +924,7 @@ function ProfileScreen({ lastSession, storageReady, installState, onInstall, onE
     : installState === 'installable'
       ? <button className="install-card" onClick={onInstall}><span className="install-icon" aria-hidden="true"><DownloadSimple size={18} /></span><span><strong>安装到桌面</strong><small>使用浏览器安装提示，之后可像普通应用一样打开。</small></span><span className="chevron" aria-hidden="true"><CaretRight size={16} /></span></button>
       : <div className="install-card"><span className="install-icon" aria-hidden="true"><DeviceMobile size={18} /></span><span><strong>{installState === 'ios-guide' ? '添加到主屏幕' : '安装为桌面应用'}</strong><small>{installState === 'ios-guide' ? '在 Safari 点“分享”，再选择“添加到主屏幕”。' : '请在浏览器菜单中选择“安装应用”或“创建快捷方式”。'}</small></span></div>
-  return <div className="page"><PageHeader eyebrow="把节奏留给自己" title="我的" right={<div className="avatar">M</div>} /><section className="profile-card"><div className="profile-avatar">LC</div><div><h2>{characterAssets.displayName}</h2><p>角色资产与训练记录都保存在本机</p></div><span className="chevron" aria-hidden="true"><CaretRight size={16} /></span></section>{installCard}<section className="section-heading section-heading--compact"><div><p className="eyebrow">训练偏好</p><h2>当前设置</h2></div></section><div className="settings-list"><SettingRow icon={<Clock size={18} aria-hidden="true" />} title="单次训练时长" value={`约 ${lastSession?.planTitle ? activePlanLabel(lastSession.planTitle) : '15 分钟'}`} /><SettingRow icon={<Target size={18} aria-hidden="true" />} title="训练重点" value="臀腿力量" /><SettingRow icon={<CalendarDots size={18} aria-hidden="true" />} title="训练记录" value={lastSession ? formatDate(lastSession.completedAt) : '暂无记录'} /></div><section className="backup-card"><div><p className="eyebrow">LOCAL BACKUP</p><h2>资料备份</h2><p>把计划、训练日历和当前角色配置导出成一个 JSON 文件，可在另一台设备恢复。</p></div><div className="backup-actions"><button onClick={onExportBackup}>导出备份</button><button onClick={() => fileInput.current?.click()}>导入备份</button><input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) onImportBackup(file); event.currentTarget.value = '' }} /></div></section><p className="muted-footnote">{storageReady ? '本机存储已就绪。训练时只播放计数，详细动作要领请点开动作详情。' : '正在准备本机存储。'}</p></div>
+  return <div className="page"><PageHeader eyebrow="把节奏留给自己" title="我的" right={<div className="avatar">M</div>} /><section className="profile-card profile-card--plain"><div><p className="eyebrow">当前教练</p><h2>{characterAssets.displayName}</h2><p>训练记录和偏好都保存在本机</p></div></section>{installCard}<section className="section-heading section-heading--compact"><div><p className="eyebrow">训练偏好</p><h2>当前设置</h2></div></section><div className="settings-list"><SettingRow icon={<Clock size={18} aria-hidden="true" />} title="单次训练时长" value={`约 ${lastSession?.planTitle ? activePlanLabel(lastSession.planTitle) : '15 分钟'}`} /><SettingRow icon={<Target size={18} aria-hidden="true" />} title="训练重点" value="臀腿力量" /><SettingRow icon={<CalendarDots size={18} aria-hidden="true" />} title="训练记录" value={lastSession ? formatDate(lastSession.completedAt) : '暂无记录'} /></div><section className="backup-card"><div><p className="eyebrow">LOCAL BACKUP</p><h2>资料备份</h2><p>把计划、训练日历和当前角色配置导出成一个 JSON 文件，可在另一台设备恢复。</p></div><div className="backup-actions"><button onClick={onExportBackup}>导出备份</button><button onClick={() => fileInput.current?.click()}>导入备份</button><input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) onImportBackup(file); event.currentTarget.value = '' }} /></div></section><p className="muted-footnote">{storageReady ? '本机存储已就绪。训练时会自动跟随动作播放数字，详细动作要领请点开动作详情。' : '正在准备本机存储。'}</p></div>
 }
 
 function activePlanLabel(title: string) { return title.includes('快速') ? '8 分钟' : title.includes('个人') ? '自定义' : '15 分钟' }
