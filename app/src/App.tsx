@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ArrowRight,
+  ArrowClockwise,
   Barbell,
   CalendarDots,
   CaretLeft,
@@ -20,7 +21,7 @@ import { characterAssets, voiceChoices } from './data/character'
 import { motionById } from './data/motion'
 import { exerciseCatalog, planPresets, todayPlan } from './data/plan'
 import { storage } from './lib/storage'
-import { guidedWorkoutPlanV2, type WorkoutExerciseV2, type WorkoutRuntimeV2, type WorkoutVoiceEvent } from './workout/runtime'
+import { guidedWorkoutPlanV2, type WorkoutExerciseV2, type WorkoutRuntimeV2, type WorkoutSegment, type WorkoutVoiceEvent } from './workout/runtime'
 import { createWorkoutCompletionRecord, isCompatibleCompletedSession, upsertCompletionHistory, type CompatibleCompletedSession } from './workout/session'
 import { createCompletedSessionV2, projectCompletedSessionV2, upsertStoredCompletedSessionV2 } from './workout/completed-session-v2'
 import { importWorkoutBackupV2, serializeWorkoutBackupV2 } from './workout/backup-v2'
@@ -59,6 +60,16 @@ const workoutPlanUiContext = { defaultPlan: todayPlan, exerciseCatalog }
 let activeCueAudio: HTMLAudioElement | null = null
 let trainingCueAudio: HTMLAudioElement | null = null
 const cueText = ''
+const guidanceAudio = {
+  preparation: '/media/audio/guidance/preparation.wav',
+  start: '/media/audio/guidance/start.wav',
+  actions: [
+    '/media/audio/guidance/action-01-goblet-squat.wav',
+    '/media/audio/guidance/action-02-romanian-deadlift.wav',
+    '/media/audio/guidance/action-03-reverse-lunge.wav',
+    '/media/audio/guidance/action-04-glute-bridge.wav',
+  ],
+} as const
 
 function createPersonalPlanId(prefix: string) {
   const suffix = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`
@@ -96,6 +107,11 @@ function primeTrainingAudio() {
       audio.load()
     }
   }
+  for (const uri of [guidanceAudio.preparation, guidanceAudio.start, ...guidanceAudio.actions]) {
+    const audio = new Audio(uri)
+    audio.preload = 'auto'
+    audio.load()
+  }
 }
 
 function speakRepCount(choice: VoiceChoice, count: number, uri?: string, variants: string[] = [], variantIndex = 0, onStatusChange?: (status: AudioStatus) => void) {
@@ -128,6 +144,43 @@ function speakWorkoutNumber(choice: VoiceChoice, event: WorkoutVoiceEvent, onSta
     event.variantIndex,
     onStatusChange,
   )
+}
+
+function speakGuidance(uri: string, choice: VoiceChoice, onStatusChange: (status: AudioStatus) => void) {
+  const audio = getTrainingCueAudio()
+  audio.pause()
+  audio.src = uri
+  audio.currentTime = 0
+  audio.playbackRate = choice.playbackRate ?? 1
+  activeCueAudio = audio
+  audio.onplay = () => onStatusChange('ready')
+  audio.onended = () => { if (activeCueAudio === audio) activeCueAudio = null }
+  audio.onerror = () => {
+    if (activeCueAudio === audio) activeCueAudio = null
+    onStatusChange('blocked')
+  }
+  void audio.play().catch(() => audio.onerror?.(new Event('error')))
+}
+
+function speakGuidanceForSegment(segment: WorkoutSegment, runtime: WorkoutRuntimeV2, choice: VoiceChoice, onStatusChange: (status: AudioStatus) => void) {
+  if (segment.kind === 'preparation') {
+    speakGuidance(guidanceAudio.preparation, choice, onStatusChange)
+    return
+  }
+  if (segment.kind === 'transition_rest' || segment.kind === 'round_rest') {
+    const actionUri = guidanceAudio.actions[segment.exerciseIndex ?? 0]
+    if (actionUri) speakGuidance(actionUri, choice, onStatusChange)
+    return
+  }
+  if (segment.kind === 'active') {
+    // The first action name follows the opening “准备，3、2、1，开始” cue;
+    // later action names were announced at the start of their short buffer.
+    if (runtime.segmentIndex === 1) {
+      speakGuidance(guidanceAudio.actions[0], choice, onStatusChange)
+    } else {
+      speakGuidance(guidanceAudio.start, choice, onStatusChange)
+    }
+  }
 }
 
 async function unlockTrainingAudio(choice: VoiceChoice) {
@@ -195,6 +248,7 @@ function App() {
   const [appInstalled, setAppInstalled] = useState(isRunningInstalledApp)
   const [iosBrowser] = useState(isIosBrowser)
   const [notice, setNotice] = useState('')
+  const [refreshingApp, setRefreshingApp] = useState(false)
   const [planUi, setPlanUi] = useState<PlanUiState>({ editorOpen: initialTab === 'plan' && activePlan.id === 'personal-draft', muscleFilter: '全部', equipmentFilter: '全部' })
   const pendingScreenRestore = useRef<{ screen: Screen; top: number; focusId?: string | null; focusHeading?: boolean } | null>(null)
   const screenScrollPositions = useRef<Partial<Record<Screen, number>>>({})
@@ -332,6 +386,32 @@ function App() {
     const ready = await unlockTrainingAudio(selectedVoice)
     setAudioStatus(ready ? 'ready' : 'blocked')
     if (!ready) setNotice('声音尚未开启，请在训练页点“开启计数声音”重试')
+  }
+
+  const refreshApp = async () => {
+    if (refreshingApp) return
+    setRefreshingApp(true)
+    setNotice('正在检查最新版本…')
+    try {
+      const registration = await navigator.serviceWorker?.getRegistration()
+      let controllerChanged: Promise<void> = Promise.resolve()
+      if (registration && navigator.serviceWorker.controller) {
+        controllerChanged = new Promise((resolve) => {
+          const timeout = window.setTimeout(resolve, 1500)
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.clearTimeout(timeout)
+            resolve()
+          }, { once: true })
+        })
+      }
+      await registration?.update()
+      if (registration?.waiting) registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+      await controllerChanged
+      window.location.reload()
+    } catch {
+      setRefreshingApp(false)
+      setNotice('检查更新失败，请稍后重试')
+    }
   }
 
   const startWorkout = (exercise?: Exercise) => {
@@ -577,7 +657,7 @@ function App() {
         ) : screen === 'calendar' ? (
           <CalendarScreen sessions={sessions} onStart={() => startWorkout()} />
         ) : screen === 'profile' ? (
-          <ProfileScreen lastSession={lastSession} storageReady={storageReady} installState={appInstalled ? 'installed' : installPrompt ? 'installable' : iosBrowser ? 'ios-guide' : 'browser-guide'} onInstall={installApp} onExportBackup={exportBackup} onImportBackup={importBackup} />
+          <ProfileScreen lastSession={lastSession} storageReady={storageReady} installState={appInstalled ? 'installed' : installPrompt ? 'installable' : iosBrowser ? 'ios-guide' : 'browser-guide'} onInstall={installApp} onRefreshApp={refreshApp} refreshingApp={refreshingApp} onExportBackup={exportBackup} onImportBackup={importBackup} />
         ) : (
           <HomeScreen activePlan={todayPlan} lastSession={lastSession} onStart={() => startWorkout()} onOpenPlan={() => goToTab('plan')} onOpenDetail={openDetail} />
         )}
@@ -723,7 +803,7 @@ function MotionPlayer({ workoutExercise, exercise, elapsedMs, paused, onReady }:
   }, [paused, workoutExercise.exerciseId])
 
   return <div className="motion-player">
-    <div className="motion-player__video-slot">{hasFormalVideo ? <video ref={videoRef} poster={workoutExercise.posterUri} autoPlay={!paused} loop muted playsInline preload="auto" onCanPlay={onReady} onLoadedMetadata={onReady}><source src={videoUri} type="video/webm" />{workoutExercise.videoFallbackUri && <source src={workoutExercise.videoFallbackUri} type="video/mp4" />}</video> : frameUris.length ? <img src={paused ? workoutExercise.posterUri : frameUris[frameIndex]} alt={motion.accessibility.altText} /> : <img src={workoutExercise.posterUri} alt={`${exercise.name}动作示范`} />}</div>
+    <div className="motion-player__video-slot">{hasFormalVideo ? <video ref={videoRef} poster={workoutExercise.posterUri} autoPlay={!paused} loop muted playsInline preload="auto" onCanPlay={onReady} onLoadedMetadata={onReady}><source src={videoUri} type={videoUri?.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />{workoutExercise.videoFallbackUri && <source src={workoutExercise.videoFallbackUri} type={workoutExercise.videoFallbackUri.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />}</video> : frameUris.length ? <img src={paused ? workoutExercise.posterUri : frameUris[frameIndex]} alt={motion.accessibility.altText} /> : <img src={workoutExercise.posterUri} alt={`${exercise.name}动作示范`} />}</div>
   </div>
 }
 
@@ -739,7 +819,7 @@ function WorkoutMediaPreloader({ exercises, onReady, onError }: { exercises: Wor
   }
   if (done) return null
   return <div aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
-    {exercises.map((exercise) => <video key={exercise.exerciseId} muted playsInline preload="auto" onCanPlay={() => markReady(exercise.exerciseId)} onError={onError}><source src={exercise.videoUri} type="video/webm" />{exercise.videoFallbackUri && <source src={exercise.videoFallbackUri} type="video/mp4" />}</video>)}
+    {exercises.map((exercise) => <video key={exercise.exerciseId} muted playsInline preload="auto" onCanPlay={() => markReady(exercise.exerciseId)} onError={onError}><source src={exercise.videoUri} type={exercise.videoUri.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />{exercise.videoFallbackUri && <source src={exercise.videoFallbackUri} type={exercise.videoFallbackUri.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />}</video>)}
   </div>
 }
 
@@ -807,6 +887,7 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
   const [mediaFailed, setMediaFailed] = useState(false)
   const clock = useWorkoutClock(guidedWorkoutPlanV2, {
     onVoiceEvent: (event) => speakWorkoutNumber(selectedVoice, event, onAudioStatusChange),
+    onSegmentStart: (segment, runtime) => speakGuidanceForSegment(segment, runtime, selectedVoice, onAudioStatusChange),
     onSilence: stopActiveCueAudio,
     onComplete,
   })
@@ -855,8 +936,8 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
     ? <div className="rest-placeholder"><span>{segment.kind === 'cooldown' ? 'COOL DOWN' : 'REST'}</span><strong>{segment.kind === 'cooldown' ? '整理与恢复' : '休息一下'}</strong><small>{segment.kind === 'cooldown' ? '保持轻松呼吸，训练即将完成' : '下一轮即将开始'}</small></div>
     : <MotionPlayer workoutExercise={workoutExercise} exercise={exercise} elapsedMs={isActiveSegment || isPreparing || isTransitionRest ? snapshot.segmentElapsedMs : 0} paused={runtime.state === 'paused' || runtime.state === 'detail'} />
 
-  let primaryValue = String(snapshot.remainingSeconds)
-  let primaryLabel = isPreparing || isTransitionRest ? '开始倒计时' : isResting ? '休息倒计时' : '剩余秒数'
+  let primaryValue = isPreparing ? '准备' : String(snapshot.remainingSeconds)
+  let primaryLabel = isPreparing ? '语音引导' : isTransitionRest ? '开始倒计时' : isResting ? '休息倒计时' : '剩余秒数'
   if (isActiveSegment && workoutExercise.countingMode === 'repetition') {
     primaryValue = `${runtime.completedCount}/${workoutExercise.targetCount ?? 0}`
     primaryLabel = '跟练计数'
@@ -917,14 +998,14 @@ function CalendarScreen({ sessions, onStart }: { sessions: CompletedSession[]; o
   return <div className="page page-calendar"><PageHeader eyebrow="把每一次完成留下来" title="训练日历" right={<div className="avatar" aria-hidden="true"><CalendarDots size={22} /></div>} /><section className="calendar-hero"><div><span className="soft-label">THIS MONTH</span><strong>{monthSessions.length}</strong><p>次训练完成</p></div><div className="calendar-hero__spark"><span /><span /><span /><span /><span /><span /><span /></div></section><section className="calendar-card"><div className="calendar-card__header"><strong>{monthLabel}</strong><span><i className="calendar-legend calendar-legend--done" />已完成</span></div><div className="calendar-weekdays">{['一', '二', '三', '四', '五', '六', '日'].map((day) => <span key={day}>{day}</span>)}</div><div className="calendar-grid">{cells.map((day, index) => { const dateKey = day ? `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}` : ''; const done = Boolean(dateKey && sessionKeys.has(dateKey)); return <div key={`${dateKey}-${index}`} className={`calendar-day ${day === today.getDate() ? 'today' : ''} ${done ? 'done' : ''}`}>{day && <><span>{day}</span>{done && <i />}</>}</div> })}</div></section><section className="calendar-summary"><div><strong>{sessions.length}</strong><span>累计训练</span></div><div><strong>{sessions.reduce((sum, session) => sum + session.rounds, 0)}</strong><span>累计轮次</span></div><div><strong>{sessions.reduce((sum, session) => sum + session.estimatedCalories, 0)}</strong><span>估算千卡</span></div></section><section className="recent-section"><div className="section-heading section-heading--compact"><div><p className="eyebrow">RECENT ACTIVITY</p><h2>最近训练</h2></div></div>{sessions.length ? <div className="recent-list">{sessions.slice().reverse().slice(0, 5).map((session) => <div className="recent-row" key={session.completedAt}><span className="recent-row__date">{new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(new Date(session.completedAt))}</span><div><strong>{session.planTitle ?? '个人训练'}</strong><span>{session.rounds} 轮 · {session.exerciseCount ?? '—'} 个动作</span></div><b>完成</b></div>)}</div> : <div className="empty-calendar"><CalendarDots size={26} aria-hidden="true" /><strong>今天开始，日历会为你点亮</strong><p>完成一次训练后，这里会自动留下记录。</p></div>}</section><button className="primary-button sticky-action" onClick={onStart}><span>开始 15 分钟跟练</span><ArrowRight size={20} aria-hidden="true" /></button></div>
 }
 
-function ProfileScreen({ lastSession, storageReady, installState, onInstall, onExportBackup, onImportBackup }: { lastSession: CompletedSession | null; storageReady: boolean; installState: PwaInstallState; onInstall: () => void; onExportBackup: () => void; onImportBackup: (file: File) => void }) {
+function ProfileScreen({ lastSession, storageReady, installState, onInstall, onRefreshApp, refreshingApp, onExportBackup, onImportBackup }: { lastSession: CompletedSession | null; storageReady: boolean; installState: PwaInstallState; onInstall: () => void; onRefreshApp: () => void; refreshingApp: boolean; onExportBackup: () => void; onImportBackup: (file: File) => void }) {
   const fileInput = useRef<HTMLInputElement>(null)
   const installCard = installState === 'installed'
     ? <div className="install-card" role="status"><span className="install-icon" aria-hidden="true"><Check size={18} weight="bold" /></span><span><strong>已安装到桌面</strong><small>无需重复安装，可从桌面图标直接打开。</small></span></div>
     : installState === 'installable'
       ? <button className="install-card" onClick={onInstall}><span className="install-icon" aria-hidden="true"><DownloadSimple size={18} /></span><span><strong>安装到桌面</strong><small>使用浏览器安装提示，之后可像普通应用一样打开。</small></span><span className="chevron" aria-hidden="true"><CaretRight size={16} /></span></button>
       : <div className="install-card"><span className="install-icon" aria-hidden="true"><DeviceMobile size={18} /></span><span><strong>{installState === 'ios-guide' ? '添加到主屏幕' : '安装为桌面应用'}</strong><small>{installState === 'ios-guide' ? '在 Safari 点“分享”，再选择“添加到主屏幕”。' : '请在浏览器菜单中选择“安装应用”或“创建快捷方式”。'}</small></span></div>
-  return <div className="page"><PageHeader eyebrow="把节奏留给自己" title="我的" right={<div className="avatar">M</div>} /><section className="profile-card profile-card--plain"><div><p className="eyebrow">当前教练</p><h2>{characterAssets.displayName}</h2><p>训练记录和偏好都保存在本机</p></div></section>{installCard}<section className="section-heading section-heading--compact"><div><p className="eyebrow">训练偏好</p><h2>当前设置</h2></div></section><div className="settings-list"><SettingRow icon={<Clock size={18} aria-hidden="true" />} title="单次训练时长" value={`约 ${lastSession?.planTitle ? activePlanLabel(lastSession.planTitle) : '15 分钟'}`} /><SettingRow icon={<Target size={18} aria-hidden="true" />} title="训练重点" value="臀腿力量" /><SettingRow icon={<CalendarDots size={18} aria-hidden="true" />} title="训练记录" value={lastSession ? formatDate(lastSession.completedAt) : '暂无记录'} /></div><section className="backup-card"><div><p className="eyebrow">LOCAL BACKUP</p><h2>资料备份</h2><p>把计划、训练日历和当前角色配置导出成一个 JSON 文件，可在另一台设备恢复。</p></div><div className="backup-actions"><button onClick={onExportBackup}>导出备份</button><button onClick={() => fileInput.current?.click()}>导入备份</button><input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) onImportBackup(file); event.currentTarget.value = '' }} /></div></section><p className="muted-footnote">{storageReady ? '本机存储已就绪。训练时会自动跟随动作播放数字，详细动作要领请点开动作详情。' : '正在准备本机存储。'}</p></div>
+  return <div className="page"><PageHeader eyebrow="把节奏留给自己" title="我的" right={<div className="avatar">M</div>} /><section className="profile-card profile-card--plain"><div><p className="eyebrow">当前教练</p><h2>{characterAssets.displayName}</h2><p>训练记录和偏好都保存在本机</p></div></section>{installCard}<section className="update-card"><div><p className="eyebrow">APP UPDATE</p><h2>版本更新</h2><p>有新版本时，点击检查更新即可刷新到最新内容。</p></div><button onClick={onRefreshApp} disabled={refreshingApp}><ArrowClockwise size={17} aria-hidden="true" className={refreshingApp ? 'spin' : undefined} /><span>{refreshingApp ? '检查中…' : '检查更新'}</span></button></section><section className="section-heading section-heading--compact"><div><p className="eyebrow">训练偏好</p><h2>当前设置</h2></div></section><div className="settings-list"><SettingRow icon={<Clock size={18} aria-hidden="true" />} title="单次训练时长" value={`约 ${lastSession?.planTitle ? activePlanLabel(lastSession.planTitle) : '15 分钟'}`} /><SettingRow icon={<Target size={18} aria-hidden="true" />} title="训练重点" value="臀腿力量" /><SettingRow icon={<CalendarDots size={18} aria-hidden="true" />} title="训练记录" value={lastSession ? formatDate(lastSession.completedAt) : '暂无记录'} /></div><section className="backup-card"><div><p className="eyebrow">LOCAL BACKUP</p><h2>资料备份</h2><p>把计划、训练日历和当前角色配置导出成一个 JSON 文件，可在另一台设备恢复。</p></div><div className="backup-actions"><button onClick={onExportBackup}>导出备份</button><button onClick={() => fileInput.current?.click()}>导入备份</button><input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) onImportBackup(file); event.currentTarget.value = '' }} /></div></section><p className="muted-footnote">{storageReady ? '本机存储已就绪。训练时会自动跟随动作播放数字，详细动作要领请点开动作详情。' : '正在准备本机存储。'}</p></div>
 }
 
 function activePlanLabel(title: string) { return title.includes('快速') ? '8 分钟' : title.includes('个人') ? '自定义' : '15 分钟' }

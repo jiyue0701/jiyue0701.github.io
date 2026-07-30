@@ -126,9 +126,13 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
   version: 2,
   title: '15 分钟臀腿跟练',
   displayDurationMinutes: 15,
-  plannedDurationMs: 882_000,
+  plannedDurationMs: 856_500,
   allowedDeviationMs: 30_000,
-  preparationMs: 30_000,
+  // The preparation segment is a short voice-led pre-roll, not a 30-second
+  // waiting room.  The first action begins immediately after the 3-2-1 cue.
+  // The approved voice-led intro is about 4.16s at its natural pace. Keep
+  // the segment long enough to finish cleanly before the first action cue.
+  preparationMs: 4_500,
   transitionRestMs: 20_000,
   roundRestMs: 60_000,
   cooldownMs: 60_000,
@@ -141,8 +145,8 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       cycleDurationMs: 4_000,
       segmentDurationMs: 40_000,
       timelineEvents: buildRepetitionTimeline(10, 4_000),
-      videoUri: '/media/actions/videos/goblet-squat.webm',
-      videoFallbackUri: '/media/actions/videos/goblet-squat.mp4',
+      videoUri: '/media/actions/videos/goblet-squat.mp4',
+      videoFallbackUri: '/media/actions/videos/goblet-squat.webm',
       posterUri: '/media/actions/posters/goblet-squat-poster.png',
       countAudioVariants: audioVariants,
     },
@@ -153,8 +157,8 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       cycleDurationMs: 4_000,
       segmentDurationMs: 40_000,
       timelineEvents: buildRepetitionTimeline(10, 4_000),
-      videoUri: '/media/actions/videos/romanian-deadlift.webm',
-      videoFallbackUri: '/media/actions/videos/romanian-deadlift.mp4',
+      videoUri: '/media/actions/videos/romanian-deadlift.mp4',
+      videoFallbackUri: '/media/actions/videos/romanian-deadlift.webm',
       posterUri: '/media/actions/posters/dumbbell-romanian-deadlift-poster.png',
       countAudioVariants: audioVariants,
     },
@@ -166,8 +170,8 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       cycleDurationMs: 6_000,
       segmentDurationMs: 48_000,
       timelineEvents: buildAlternatingTimeline(8, 6_000, 'left'),
-      videoUri: '/media/actions/videos/reverse-lunge.webm',
-      videoFallbackUri: '/media/actions/videos/reverse-lunge.mp4',
+      videoUri: '/media/actions/videos/reverse-lunge.mp4',
+      videoFallbackUri: '/media/actions/videos/reverse-lunge.webm',
       posterUri: '/media/actions/posters/reverse-lunge-poster.png',
       countAudioVariants: audioVariants,
     },
@@ -178,8 +182,8 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       cycleDurationMs: 3_000,
       segmentDurationMs: 36_000,
       timelineEvents: buildRepetitionTimeline(12, 3_000),
-      videoUri: '/media/actions/videos/glute-bridge.webm',
-      videoFallbackUri: '/media/actions/videos/glute-bridge.mp4',
+      videoUri: '/media/actions/videos/glute-bridge.mp4',
+      videoFallbackUri: '/media/actions/videos/glute-bridge.webm',
       posterUri: '/media/actions/posters/dumbbell-glute-bridge-poster.png',
       countAudioVariants: audioVariants,
     },
@@ -207,7 +211,9 @@ export function buildWorkoutSegments(plan: WorkoutPlanV2): WorkoutSegment[] {
       roundIndex: 0,
       exerciseIndex: 0,
       exerciseId: plan.exercises[0]?.exerciseId,
-      events: buildCountdownTimeline(plan.preparationMs, [3, 2, 1], 'prepare'),
+      // The preparation numbers are spoken by the single intro cue so they
+      // cannot race the action-name prompt or be replayed after a late frame.
+      events: [],
     })
   }
 

@@ -15,6 +15,7 @@ import {
   type WorkoutClockSnapshotV2,
   type WorkoutPlanV2,
   type WorkoutRuntimeV2,
+  type WorkoutSegment,
   type WorkoutVoiceEvent,
 } from './runtime'
 
@@ -22,6 +23,7 @@ type WorkoutClockOptions = {
   onVoiceEvent: (event: WorkoutVoiceEvent) => void
   onSilence: () => void
   onComplete: (runtime: WorkoutRuntimeV2) => void
+  onSegmentStart?: (segment: WorkoutSegment, runtime: WorkoutRuntimeV2) => void
 }
 
 function createSessionId() {
@@ -53,7 +55,10 @@ export function useWorkoutClock(plan: WorkoutPlanV2, options: WorkoutClockOption
 
   const publishAdvance = useCallback((result: WorkoutAdvanceResult) => {
     runtimeRef.current = result.runtime
-    if (result.segmentChanged) optionsRef.current.onSilence()
+    if (result.segmentChanged) {
+      optionsRef.current.onSilence()
+      optionsRef.current.onSegmentStart?.(result.snapshot.segment, result.runtime)
+    }
     setSnapshot(result.snapshot)
     for (const event of result.voiceEvents) optionsRef.current.onVoiceEvent(event)
     if (result.runtime.state === 'completed' && !completionNotifiedRef.current) {
@@ -65,7 +70,10 @@ export function useWorkoutClock(plan: WorkoutPlanV2, options: WorkoutClockOption
 
   const start = useCallback(() => {
     const nowMs = performance.now()
-    publishRuntime(startWorkoutRuntime(runtimeRef.current, plan, nowMs), nowMs)
+    const previous = runtimeRef.current
+    const next = startWorkoutRuntime(previous, plan, nowMs)
+    const nextSnapshot = publishRuntime(next, nowMs)
+    if (previous.state === 'idle' && next.state !== 'idle') optionsRef.current.onSegmentStart?.(nextSnapshot.segment, next)
   }, [plan, publishRuntime])
 
   const pause = useCallback((reason: Exclude<PauseReason, 'detail_return'> = 'manual') => {

@@ -23,35 +23,37 @@ function startedRuntime() {
   return startWorkoutRuntime(createWorkoutRuntime(guidedWorkoutPlanV2, 'test-session'), guidedWorkoutPlanV2, 0)
 }
 
-test('the guided plan contains 25 segments and totals exactly 14:42', () => {
+test('the guided plan contains 25 segments and totals the voice-led 14:17 runtime', () => {
   assert.equal(validateWorkoutPlan(guidedWorkoutPlanV2).length, 0)
   assert.equal(buildWorkoutSegments(guidedWorkoutPlanV2).length, 25)
-  assert.equal(calculatePlannedDurationMs(guidedWorkoutPlanV2), 882_000)
+  assert.equal(calculatePlannedDurationMs(guidedWorkoutPlanV2), 856_500)
+  assert.equal(buildWorkoutSegments(guidedWorkoutPlanV2)[0].events.length, 0)
+  assert.equal(guidedWorkoutPlanV2.preparationMs, 4_500)
 })
 
 test('a repetition stays at zero until the first complete four-second cycle', () => {
   let runtime = startedRuntime()
-  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 30_000).runtime
-  let result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 33_999)
+  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 4_500).runtime
+  let result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 8_499)
   assert.equal(result.snapshot.runtime.completedCount, 0)
   assert.equal(result.voiceEvents.length, 0)
 
-  result = advanceWorkoutRuntime(result.runtime, guidedWorkoutPlanV2, 34_000)
+  result = advanceWorkoutRuntime(result.runtime, guidedWorkoutPlanV2, 8_500)
   assert.equal(result.snapshot.runtime.completedCount, 1)
   assert.deepEqual(result.voiceEvents.map((event) => event.value), [1])
 })
 
 test('an alternating pair reports one only after both sides finish', () => {
   let runtime = startedRuntime()
-  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 150_000).runtime
+  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 124_500).runtime
 
-  let result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 153_000)
+  let result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 127_500)
   assert.equal(result.snapshot.runtime.leftCompleted, 1)
   assert.equal(result.snapshot.runtime.rightCompleted, 0)
   assert.equal(result.snapshot.runtime.completedCount, 0)
   assert.equal(result.voiceEvents.length, 0)
 
-  result = advanceWorkoutRuntime(result.runtime, guidedWorkoutPlanV2, 156_000)
+  result = advanceWorkoutRuntime(result.runtime, guidedWorkoutPlanV2, 130_500)
   assert.equal(result.snapshot.runtime.leftCompleted, 1)
   assert.equal(result.snapshot.runtime.rightCompleted, 1)
   assert.equal(result.snapshot.runtime.completedCount, 1)
@@ -60,13 +62,13 @@ test('an alternating pair reports one only after both sides finish', () => {
 
 test('pause freezes exact milliseconds and resume neither resets nor replays', () => {
   let runtime = startedRuntime()
-  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 32_000).runtime
-  const paused = pauseWorkoutRuntime(runtime, guidedWorkoutPlanV2, 32_000, 'manual')
+  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 6_500).runtime
+  const paused = pauseWorkoutRuntime(runtime, guidedWorkoutPlanV2, 6_500, 'manual')
   assert.equal(paused.snapshot.segmentElapsedMs, 2_000)
-  assert.equal(getWorkoutSnapshot(paused.runtime, guidedWorkoutPlanV2, 62_000).segmentElapsedMs, 2_000)
+  assert.equal(getWorkoutSnapshot(paused.runtime, guidedWorkoutPlanV2, 36_500).segmentElapsedMs, 2_000)
 
-  runtime = resumeWorkoutRuntime(paused.runtime, 62_000)
-  const resumed = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 64_000)
+  runtime = resumeWorkoutRuntime(paused.runtime, 36_500)
+  const resumed = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 38_500)
   assert.equal(resumed.snapshot.segmentElapsedMs, 4_000)
   assert.equal(resumed.snapshot.runtime.completedCount, 1)
   assert.deepEqual(resumed.voiceEvents.map((event) => event.value), [1])
@@ -74,8 +76,8 @@ test('pause freezes exact milliseconds and resume neither resets nor replays', (
 
 test('late historical nodes update UI but are suppressed instead of replayed', () => {
   let runtime = startedRuntime()
-  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 30_000).runtime
-  const result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 34_500)
+  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 4_500).runtime
+  const result = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 9_000)
   assert.equal(result.snapshot.runtime.completedCount, 1)
   assert.equal(result.voiceEvents.length, 0)
   assert.ok(result.runtime.suppressedEventIds.includes('round-1-exercise-1:rep-1'))
@@ -83,9 +85,9 @@ test('late historical nodes update UI but are suppressed instead of replayed', (
 
 test('rest skip advances once and resets the next action to zero', () => {
   let runtime = startedRuntime()
-  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 70_000).runtime
+  runtime = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 44_500).runtime
   assert.equal(runtime.state, 'rest')
-  const skipped = skipWorkoutSegment(runtime, guidedWorkoutPlanV2, 70_000)
+  const skipped = skipWorkoutSegment(runtime, guidedWorkoutPlanV2, 44_500)
   assert.equal(skipped.runtime.state, 'active')
   assert.equal(skipped.runtime.exerciseIndex, 1)
   assert.equal(skipped.runtime.completedCount, 0)
@@ -93,9 +95,9 @@ test('rest skip advances once and resets the next action to zero', () => {
 })
 
 test('a long stall completes at planned time without duplicate event ids', () => {
-  const result = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 882_000)
+  const result = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 856_500)
   assert.equal(result.runtime.state, 'completed')
-  assert.equal(result.snapshot.plannedElapsedMs, 882_000)
+  assert.equal(result.snapshot.plannedElapsedMs, 856_500)
   assert.equal(new Set(result.runtime.announcedEventIds).size, result.runtime.announcedEventIds.length)
   assert.equal(new Set(result.runtime.suppressedEventIds).size, result.runtime.suppressedEventIds.length)
   assert.equal(result.runtime.announcedEventIds.some((id) => result.runtime.suppressedEventIds.includes(id)), false)
@@ -149,19 +151,19 @@ test('transition rests use 3, 2, 1 while round rests use 5 through 1', () => {
 })
 
 test('background pause freezes and never catches up before explicit resume', () => {
-  let runtime = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 32_500).runtime
-  const paused = pauseWorkoutRuntime(runtime, guidedWorkoutPlanV2, 32_500, 'background')
+  let runtime = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 7_000).runtime
+  const paused = pauseWorkoutRuntime(runtime, guidedWorkoutPlanV2, 7_000, 'background')
   assert.equal(paused.runtime.pauseReason, 'background')
-  assert.equal(getWorkoutSnapshot(paused.runtime, guidedWorkoutPlanV2, 92_500).segmentElapsedMs, 2_500)
-  runtime = resumeWorkoutRuntime(paused.runtime, 92_500)
-  const resumed = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 94_000)
+  assert.equal(getWorkoutSnapshot(paused.runtime, guidedWorkoutPlanV2, 67_000).segmentElapsedMs, 2_500)
+  runtime = resumeWorkoutRuntime(paused.runtime, 67_000)
+  const resumed = advanceWorkoutRuntime(runtime, guidedWorkoutPlanV2, 68_500)
   assert.equal(resumed.snapshot.segmentElapsedMs, 4_000)
   assert.deepEqual(resumed.voiceEvents.map((event) => event.value), [1])
 })
 
 test('opening and closing detail ten times preserves position and returns paused', () => {
-  let runtime = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 32_000).runtime
-  let nowMs = 32_000
+  let runtime = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 6_500).runtime
+  let nowMs = 6_500
   for (let index = 0; index < 10; index += 1) {
     const detail = enterWorkoutDetail(runtime, guidedWorkoutPlanV2, nowMs)
     assert.equal(detail.runtime.state, 'detail')
@@ -177,16 +179,16 @@ test('opening and closing detail ten times preserves position and returns paused
 })
 
 test('completion is terminal and repeated advances emit nothing', () => {
-  const completed = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 882_000)
+  const completed = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 856_500)
   const repeated = advanceWorkoutRuntime(completed.runtime, guidedWorkoutPlanV2, 1_000_000)
   assert.equal(repeated.runtime.state, 'completed')
-  assert.equal(repeated.snapshot.plannedElapsedMs, 882_000)
+  assert.equal(repeated.snapshot.plannedElapsedMs, 856_500)
   assert.equal(repeated.voiceEvents.length, 0)
   assert.equal(repeated.segmentChanged, false)
 })
 
 test('exit is terminal and late scheduler callbacks cannot complete the session', () => {
-  const active = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 34_000).runtime
+  const active = advanceWorkoutRuntime(startedRuntime(), guidedWorkoutPlanV2, 8_500).runtime
   const exited = exitWorkoutRuntime(active)
   const late = advanceWorkoutRuntime(exited, guidedWorkoutPlanV2, 1_000_000)
   assert.equal(late.runtime.state, 'exited')

@@ -40,7 +40,10 @@ const actionMedia = (exerciseId: string, loopSeconds: number, tipUri?: string) =
   const countVariants = countUris.map((uri) => [uri.replace('.wav', '-v2.wav')])
   return {
   posterUri: posterUriFor(exerciseId),
-  videoUri: `/media/actions/videos/${exerciseId}.webm`,
+  // Prefer the native MP4 master on iPhone Safari.  WebM remains an explicit
+  // fallback for browsers that decode it more efficiently; neither path is
+  // re-encoded by the app.
+  videoUri: `/media/actions/videos/${exerciseId}.mp4`,
   motionId,
   videoStatus: 'approved' as const,
   loopSeconds,
@@ -592,7 +595,7 @@ for (const exercise of exerciseCatalog) {
   exercise.videoLabel = '完整动作视频 · 30 FPS WebM / MP4'
   exercise.videoStatus = 'approved'
   exercise.media.motionId = `${exercise.id}.v1`
-  exercise.media.videoUri = `/media/actions/videos/${exercise.id}.webm`
+  exercise.media.videoUri = `/media/actions/videos/${exercise.id}.mp4`
   exercise.media.videoStatus = 'approved'
   if (!exercise.media.posterUri || exercise.media.posterUri.endsWith('standard-action-poster.svg')) {
     exercise.media.posterUri = posterUriFor(exercise.id)
@@ -603,7 +606,7 @@ export const planPresets: TrainingPlan[] = [
   {
     id: 'lower-body-guided-15m-v2',
     title: '15 分钟臀腿跟练',
-    subtitle: '4 个核心动作 · 3 轮 · 完整跟练 14:42。',
+    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:17。',
     duration: 15,
     rounds: 3,
     estimatedCalories: 96,

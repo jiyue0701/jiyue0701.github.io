@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import test from 'node:test'
 
@@ -25,6 +25,22 @@ test('Profile PWA path uses accessible Phosphor icons without text glyph placeho
   assert.match(settingRowSource, /icon: ReactNode/)
   assert.match(settingRowSource, /<CaretRight\b/)
   assert.doesNotMatch(guardedSource, /className="(?:install-icon|chevron|setting-icon)"(?! aria-hidden="true")/)
+})
+
+test('voice-led workout cues and refresh path are shipped with native video masters', () => {
+  const app = readFileSync(join(appRoot, 'src', 'App.tsx'), 'utf8')
+  for (const filename of [
+    'preparation.wav',
+    'start.wav',
+    'action-01-goblet-squat.wav',
+    'action-02-romanian-deadlift.wav',
+    'action-03-reverse-lunge.wav',
+    'action-04-glute-bridge.wav',
+  ]) assert.equal(existsSync(join(publicRoot, 'media', 'audio', 'guidance', filename)), true, `${filename} must be bundled`)
+  assert.match(app, /preparation: '\/media\/audio\/guidance\/preparation\.wav'/)
+  assert.match(app, /onSegmentStart:/)
+  assert.match(app, /refreshApp/)
+  assert.match(app, /videoUri\.endsWith\('\.mp4'\)/)
 })
 
 test('manifest provides separate standard any and maskable PNG icons', () => {
@@ -54,7 +70,7 @@ test('index exposes Apple touch icon and standalone metadata', () => {
 
 test('manifest shortcuts describe fixed v2 workout and save-only personal lists', () => {
   const manifestText = readFileSync(join(publicRoot, 'manifest.webmanifest'), 'utf8')
-  assert.match(manifestText, /固定四动作、三轮、约 14:42/)
+  assert.match(manifestText, /固定四动作、三轮、约 14:17/)
   assert.match(manifestText, /整理并保存个人动作清单，不会替代固定跟练计划/)
   assert.doesNotMatch(manifestText, /直接打开当前训练计划/)
 })

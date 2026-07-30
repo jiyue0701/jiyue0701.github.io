@@ -72,7 +72,7 @@ test('completion identity is stable and derived from runtime sessionId', () => {
   assert.notEqual(first.completionEventId, other.completionEventId)
   assert.equal(first.planId, guidedWorkoutPlanV2.id)
   assert.equal(first.planVersion, guidedWorkoutPlanV2.version)
-  assert.equal(first.plannedDurationMs, 882_000)
+  assert.equal(first.plannedDurationMs, 856_500)
   assert.equal(isWorkoutCompletionRecord(first), true)
 })
 

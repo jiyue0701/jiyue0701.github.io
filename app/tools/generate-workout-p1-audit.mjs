@@ -106,7 +106,7 @@ try {
   }, session('audit-volatile'), fresh)
 } catch (error) { completionPersistenceRejected = error instanceof WorkoutP1Error && error.code === 'BACKUP_PERSIST_FAILED' }
 writeAudit('completed-session-v2.json', [
-  check('schema-and-timing', () => completed.plannedDurationMs === 882000 && completed.activeElapsedMs === 882000 && completed.wallElapsedMs === 882000, { plannedDurationMs: completed.plannedDurationMs, activeElapsedMs: completed.activeElapsedMs, wallElapsedMs: completed.wallElapsedMs }),
+  check('schema-and-timing', () => completed.plannedDurationMs === 856500 && completed.activeElapsedMs === 856500 && completed.wallElapsedMs === 856500, { plannedDurationMs: completed.plannedDurationMs, activeElapsedMs: completed.activeElapsedMs, wallElapsedMs: completed.wallElapsedMs }),
   check('segment-cover', () => completed.completedSegmentIds.length === 25 && completed.skippedSegmentIds.length === 0, { completedSegmentCount: completed.completedSegmentIds.length, skippedSegmentCount: completed.skippedSegmentIds.length }),
   check('skipped-segment-facts', () => skipped.skippedSegmentIds.join(',') === 'round-1-exercise-1' && skipped.roundsCompleted === 2, { skippedSegmentIds: skipped.skippedSegmentIds, roundsCompleted: skipped.roundsCompleted }),
   check('duplicate-session-noop', () => upsertCompletedSessionV2(inserted.state, completed).inserted === false),
@@ -160,7 +160,7 @@ delete missingCatalog.exercises['bodyweight-squat']
 const missingPreflight = runWorkoutDataPreflightV2(personalState, missingCatalog)
 const fixedMaterialized = materializeWorkoutPlanV2(createFixedWorkoutPlanRecordV2())
 writeAudit('personal-plan-runtime.json', [
-  check('fixed-plan-sum', () => buildWorkoutSegments(fixedMaterialized).length === 25 && fixedMaterialized.plannedDurationMs === 882000),
+  check('fixed-plan-sum', () => buildWorkoutSegments(fixedMaterialized).length === 25 && fixedMaterialized.plannedDurationMs === 856500),
   check('counting-modes', () => personalState.plans.find((plan) => plan.id === 'audit-three-modes')?.exercises.map((exercise) => exercise.counting.mode).join(',') === 'repetition,timed,alternating_pair'),
   check('plan-schema', () => validateWorkoutPlanRecordV2(createFixedWorkoutPlanRecordV2()).ok),
   check('fixed-preflight', () => runWorkoutDataPreflightV2(fresh).fixedRuntimeReady),

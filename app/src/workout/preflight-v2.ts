@@ -20,7 +20,7 @@ function fixedRuntimeIssues(plan = guidedWorkoutPlanV2) {
   const issues: PreflightIssueV2[] = []
   const segments = buildWorkoutSegments(plan)
   if (plan.id !== FIXED_RUNTIME_PLAN_ID || plan.rounds !== 3 || plan.exercises.map((exercise) => exercise.exerciseId).join(',') !== 'goblet-squat,romanian-deadlift,reverse-lunge,glute-bridge') issues.push(error('PLAN_SCHEMA_INVALID', '$.fixedRuntimePlanId', 'fixed runtime identity or exercise order changed'))
-  if (segments.length !== 25 || calculatePlannedDurationMs(plan) !== 882_000 || plan.plannedDurationMs !== 882_000) issues.push(error('PLAN_DURATION_MISMATCH', '$.plans', 'fixed runtime must remain 25 segments and 882000ms'))
+  if (segments.length !== 25 || calculatePlannedDurationMs(plan) !== 856_500 || plan.plannedDurationMs !== 856_500) issues.push(error('PLAN_DURATION_MISMATCH', '$.plans', 'fixed runtime must remain 25 segments and 856500ms'))
   if (segments.filter((segment) => segment.kind === 'transition_rest').some((segment) => canonicalJson(segment.events.map((event) => event.value)) !== canonicalJson([3, 2, 1]))) issues.push(error('PLAN_SCHEMA_INVALID', '$.plans', 'transition rest countdown changed'))
   if (segments.filter((segment) => segment.kind === 'round_rest').some((segment) => canonicalJson(segment.events.map((event) => event.value)) !== canonicalJson([5, 4, 3, 2, 1]))) issues.push(error('PLAN_SCHEMA_INVALID', '$.plans', 'round rest countdown changed'))
   issues.push(...validateWorkoutPlan(plan).map((message) => error(message.startsWith('planned duration') ? 'PLAN_DURATION_MISMATCH' : 'PLAN_SCHEMA_INVALID', '$.plans', message)))

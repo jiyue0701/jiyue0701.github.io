@@ -77,8 +77,10 @@ function countAudioBank() {
 
 function motion(videoName: string, posterName = `${videoName}-poster.png`) {
   return {
-    videoUri: `/media/actions/videos/${videoName}.webm`,
-    videoFallbackUri: `/media/actions/videos/${videoName}.mp4`,
+    // Keep the authored MP4 master as the primary source for iPhone Safari;
+    // WebM remains an explicit fallback. The app never re-encodes either file.
+    videoUri: `/media/actions/videos/${videoName}.mp4`,
+    videoFallbackUri: `/media/actions/videos/${videoName}.webm`,
     posterUri: `/media/actions/posters/${posterName}`,
   }
 }
@@ -142,7 +144,7 @@ export function createFixedWorkoutPlanRecordV2(): WorkoutPlanRecordV2 {
     version: 2,
     revision: 'fixed-runtime-v2/1',
     title: guidedWorkoutPlanV2.title,
-    subtitle: '4 个核心动作 · 3 轮 · 完整跟练 14:42。',
+    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:17。',
     source: 'system',
     executionPolicy: 'fixed_entry',
     displayDurationMinutes: guidedWorkoutPlanV2.displayDurationMinutes,
@@ -298,7 +300,7 @@ function migratePersonalPlan(
     displayDurationMinutes: plan.duration,
     plannedDurationMs: 0,
     allowedDeviationMs: 30_000,
-    preparationMs: 30_000,
+    preparationMs: 3_000,
     transitionRestMs: 20_000,
     roundRestMs: 60_000,
     cooldownMs: 60_000,

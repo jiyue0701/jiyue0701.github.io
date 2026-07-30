@@ -311,23 +311,33 @@ button:focus-visible { outline: 3px solid rgba(196, 73, 50, .35); outline-offset
 .backup-card p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .backup-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .backup-actions button { min-height: 38px; border-radius: 11px; background: var(--coral-soft); color: var(--coral); font-size: 11px; font-weight: 700; }
+.update-card { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; padding: 16px; border: 1px solid rgba(243,108,78,.22); border-radius: 18px; background: linear-gradient(135deg, #fff8f5, #fff); }
+.update-card > div { min-width: 0; }
+.update-card h2 { margin: 5px 0 6px; font-size: 16px; }
+.update-card p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.update-card button { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; min-height: 38px; padding: 0 12px; border-radius: 11px; background: var(--coral); color: #fff; font-size: 11px; font-weight: 700; }
+.update-card button:disabled { opacity: .68; }
+.spin { animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .toast { position: fixed; z-index: 45; right: 18px; bottom: calc(var(--bottom-stack-height) + 12px); left: 18px; max-width: 480px; margin: 0 auto; padding: 12px 14px; border-radius: 13px; background: #29252a; color: #fff; box-shadow: 0 12px 26px rgba(39,35,38,.2); text-align: center; font-size: .75rem; animation: page-in .2s ease-out; }
 
 .workout-overlay { position: fixed; z-index: 30; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: rgba(27, 25, 29, .74); backdrop-filter: blur(10px); -webkit-overflow-scrolling: touch; }
 .detail-overlay { position: fixed; z-index: 50; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: var(--paper); }
 .detail-overlay .page-detail { width: 100%; max-width: 520px; min-height: 100%; margin: 0 auto; background: var(--paper); }
-.workout-sheet { width: 100%; min-height: 100svh; max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom)); background: #211f23; color: #fff; }
+.workout-sheet { display: flex; flex-direction: column; width: 100%; min-height: 100svh; max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom)); background: #211f23; color: #fff; }
 .workout-sheet .back-button, .workout-sheet .text-button { color: rgba(255,255,255,.72); }
 .workout-sheet .progress-track { background: rgba(255,255,255,.16); }
 .workout-sheet .workout-progress > span, .workout-sheet .workout-stage__topline, .workout-sheet .pause-button { color: rgba(255,255,255,.58); }
-.workout-layout { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.workout-layout { display: flex; flex: 1 1 auto; flex-direction: column; min-width: 0; min-height: 0; }
 .workout-visual-pane, .workout-control-pane { min-width: 0; min-height: 0; }
+.workout-control-pane { display: flex; flex: 1 1 auto; flex-direction: column; }
 .workout-stage { position: relative; overflow: hidden; margin-top: 23px; border-radius: 26px; background: #15171a; box-shadow: 0 24px 45px rgba(0,0,0,.3); }
 .workout-stage__media { height: min(62svh, 600px); min-height: 330px; background: #262a30; }
 .workout-stage__media > img, .workout-stage__media > video { width: 100%; height: 100%; object-fit: contain; object-position: center center; }
 .motion-player { display: flex; align-items: stretch; justify-content: center; width: 100%; height: 100%; overflow: hidden; background: #15171a; }
 .motion-player__video-slot { flex: 0 1 auto; width: min(100%, 430px); height: 100%; max-width: none; aspect-ratio: 9 / 16; overflow: hidden; background: #15171a; }
-.motion-player__video-slot > img, .motion-player__video-slot > video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center center; }
+.motion-player__video-slot > img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center center; }
+.motion-player__video-slot > video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center center; }
 .motion-player__rail { display: flex; flex: 1 1 48px; align-items: flex-end; min-width: 0; padding: 12px 10px; color: rgba(255,255,255,.76); font-size: .6875rem; line-height: 1.35; text-shadow: 0 1px 8px rgba(0,0,0,.5); pointer-events: none; }
 .motion-player__rail--end { justify-content: flex-end; text-align: right; }
 .motion-player__rail span { max-width: 100%; overflow-wrap: anywhere; }
@@ -359,7 +369,7 @@ button:focus-visible { outline: 3px solid rgba(196, 73, 50, .35); outline-offset
 .workout-live-copy strong { font-size: 19px; letter-spacing: -.05em; }
 .workout-live-copy div:first-child strong { font-size: 34px; line-height: 1; }
 .workout-live-copy span { color: rgba(255,255,255,.54); font-size: 10px; }
-.workout-live-actions { display: grid; grid-template-columns: minmax(96px, .75fr) 1.25fr; gap: 10px; margin-top: 18px; }
+.workout-live-actions { display: grid; grid-template-columns: minmax(96px, .75fr) 1.25fr; gap: 10px; margin-top: auto; padding-top: 14px; }
 .audio-enable-button { width: 100%; min-height: 44px; margin-top: 8px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 12px; background: rgba(196,73,50,.2); color: #ffd8ce; font-size: 11px; font-weight: 700; }
 .workout-sheet .secondary-button { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
 .workout-sheet .primary-button { box-shadow: 0 12px 25px rgba(243,108,78,.18); }
@@ -399,7 +409,7 @@ button:focus-visible { outline: 3px solid rgba(196, 73, 50, .35); outline-offset
   }
 
   .workout-stage__media {
-    height: calc(min(56svh, 500px) - 24px);
+    height: calc(min(60svh, 540px) - 22px);
     min-height: 0;
   }
 
@@ -426,7 +436,7 @@ button:focus-visible { outline: 3px solid rgba(196, 73, 50, .35); outline-offset
   .workout-live-copy { margin-top: 6px; padding: 7px 0; }
   .workout-live-copy strong { font-size: 16px; }
   .workout-live-copy div:first-child strong { font-size: 29px; }
-  .workout-live-actions { margin-top: 7px; }
+  .workout-live-actions { margin-top: auto; padding-top: 9px; }
   .audio-enable-button { min-height: 44px; margin-top: 5px; }
   .workout-live-actions .primary-button,
   .workout-live-actions .secondary-button { min-height: 48px; border-radius: 15px; }
