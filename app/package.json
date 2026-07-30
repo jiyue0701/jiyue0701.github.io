@@ -6,14 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test:pwa": "node --experimental-strip-types --test tools/pwa-static.test.ts",
+    "audit:workout-p1": "node --experimental-strip-types tools/generate-workout-p1-audit.mjs",
+    "test:workout-app-persistence": "node --experimental-strip-types --test tools/workout-app-persistence-v2.test.ts",
+    "test:workout-p1": "pnpm audit:workout-p1 && node --experimental-strip-types --test tools/workout-p1-v2.test.ts && pnpm test:workout-app-persistence",
+    "test:storage": "node --experimental-strip-types --test tools/storage-fallback.test.ts tools/storage-fallback-edge.test.mjs",
+    "test:workout": "node --experimental-strip-types --test tools/workout-runtime.test.ts tools/workout-session.test.ts",
+    "test:workout-session": "node --experimental-strip-types --test tools/workout-session.test.ts",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@vitejs/plugin-react": "latest",
-    "typescript": "latest",
-    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vite": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",

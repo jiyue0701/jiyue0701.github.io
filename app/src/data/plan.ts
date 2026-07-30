@@ -600,14 +600,14 @@ for (const exercise of exerciseCatalog) {
 
 export const planPresets: TrainingPlan[] = [
   {
-    id: 'lower-body-foundation-v0-2',
-    title: '臀腿基础动作库',
-    subtitle: '徒手、椅子辅助与哑铃动作，按目标灵活组合。',
+    id: 'lower-body-guided-15m-v2',
+    title: '15 分钟臀腿跟练',
+    subtitle: '4 个核心动作 · 3 轮 · 完整跟练 14:42。',
     duration: 15,
-    rounds: 2,
+    rounds: 3,
     estimatedCalories: 96,
     source: 'preset',
-    exercises: exerciseCatalog.filter((exercise) => exercise.muscleGroups?.some((group) => ['臀大肌', '股四头肌', '腘绳肌', '小腿', '髋稳定', '下肢稳定'].includes(group))),
+    exercises: exerciseCatalog.filter((exercise) => ['goblet-squat', 'romanian-deadlift', 'reverse-lunge', 'glute-bridge'].includes(exercise.id)),
   },
   {
     id: 'quick-lower-body-v0-1',
