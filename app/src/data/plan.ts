@@ -75,11 +75,11 @@ const assetMedia = (exerciseId?: string) => ({
 const squatMedia = actionMedia('goblet-squat', 4.5, '/media/audio/detail/goblet-squat-detail.wav')
 const bodyweightSquatMedia = actionMedia('bodyweight-squat', 3.75)
 const bodyweightGluteBridgeMedia = actionMedia('bodyweight-glute-bridge', 3.75)
-const reverseLungeMedia = actionMedia('reverse-lunge', 4.5)
+const reverseLungeMedia = actionMedia('reverse-lunge', 4.5, '/media/audio/detail/reverse-lunge-detail.wav')
 const chairSitToStandMedia = actionMedia('chair-sit-to-stand', 4.5)
 const chairAssistedSplitSquatMedia = actionMedia('chair-assisted-split-squat', 5.625)
-const dumbbellRomanianDeadliftMedia = actionMedia('romanian-deadlift', 4.5)
-const dumbbellGluteBridgeMedia = actionMedia('glute-bridge', 3.75)
+const dumbbellRomanianDeadliftMedia = actionMedia('romanian-deadlift', 4.5, '/media/audio/detail/romanian-deadlift-detail.wav')
+const dumbbellGluteBridgeMedia = actionMedia('glute-bridge', 3.75, '/media/audio/detail/glute-bridge-detail.wav')
 const dumbbellReverseLungeMedia = actionMedia('dumbbell-reverse-lunge', 5.625)
 
 export const exerciseCatalog: Exercise[] = [

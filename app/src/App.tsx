@@ -69,6 +69,7 @@ const trainingCueQueue: QueuedTrainingCue[] = []
 let trainingCueGeneration = 0
 let trainingCueDrain: Promise<void> | null = null
 let stopCurrentCue: (() => void) | null = null
+let trainingAudioUnlocked = false
 const cueText = ''
 const guidanceAudio = {
   preparation: '/media/audio/guidance/preparation.wav',
@@ -104,6 +105,11 @@ function stopActiveCueAudio() {
   activeCueAudio = null
 }
 
+function resetTrainingAudioSession() {
+  stopActiveCueAudio()
+  trainingAudioUnlocked = false
+}
+
 function getTrainingCueAudio() {
   if (!trainingCueAudio) {
     trainingCueAudio = new Audio()
@@ -130,6 +136,7 @@ function primeTrainingAudio() {
 }
 
 async function drainTrainingCueQueue() {
+  if (!trainingAudioUnlocked) return
   if (trainingCueDrain) return trainingCueDrain
   const generation = trainingCueGeneration
   trainingCueDrain = (async () => {
@@ -183,7 +190,7 @@ async function drainTrainingCueQueue() {
 
 function enqueueTrainingCue(uri: string, choice: VoiceChoice, onStatusChange?: (status: AudioStatus) => void) {
   trainingCueQueue.push({ uri, playbackRate: choice.playbackRate ?? 1, onStatusChange })
-  void drainTrainingCueQueue()
+  if (trainingAudioUnlocked) void drainTrainingCueQueue()
 }
 
 function speakRepCount(choice: VoiceChoice, count: number, uri?: string, variants: string[] = [], variantIndex = 0, onStatusChange?: (status: AudioStatus) => void) {
@@ -229,7 +236,15 @@ function speakGuidanceForSegment(segment: WorkoutSegment, runtime: WorkoutRuntim
 
 async function unlockTrainingAudio(choice: VoiceChoice) {
   if (!choice.audioUri) return false
-  stopActiveCueAudio()
+  // Stop only the currently playing cue. Keep the queued guidance/counts so a
+  // user retry does not silently lose the opening instruction.
+  trainingAudioUnlocked = false
+  trainingCueGeneration += 1
+  stopCurrentCue?.()
+  stopCurrentCue = null
+  activeCueAudio?.pause()
+  if (activeCueAudio) activeCueAudio.currentTime = 0
+  activeCueAudio = null
   const audio = getTrainingCueAudio()
   audio.src = choice.audioUri
   audio.preload = 'auto'
@@ -240,10 +255,13 @@ async function unlockTrainingAudio(choice: VoiceChoice) {
     audio.pause()
     audio.currentTime = 0
     audio.volume = 1
+    trainingAudioUnlocked = true
     primeTrainingAudio()
+    void drainTrainingCueQueue()
     return true
   } catch {
     audio.volume = 1
+    trainingAudioUnlocked = false
     return false
   }
 }
@@ -463,6 +481,7 @@ function App() {
     void exercise
     setWorkoutDetailOpen(false)
     setAudioStatus('idle')
+    resetTrainingAudioSession()
     void enableTrainingAudio()
     setScreen('workout')
   }
@@ -848,19 +867,24 @@ function MotionPlayer({ workoutExercise, exercise, elapsedMs, paused, onReady }:
   }, [paused, workoutExercise.exerciseId])
 
   return <div className="motion-player">
-    <div className="motion-player__video-slot">{hasFormalVideo ? <video ref={videoRef} poster={workoutExercise.posterUri} autoPlay={!paused} loop muted playsInline preload="auto" onCanPlay={onReady} onLoadedMetadata={onReady}><source src={videoUri} type={videoUri?.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />{workoutExercise.videoFallbackUri && <source src={workoutExercise.videoFallbackUri} type={workoutExercise.videoFallbackUri.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />}</video> : frameUris.length ? <img src={paused ? workoutExercise.posterUri : frameUris[frameIndex]} alt={motion.accessibility.altText} /> : <img src={workoutExercise.posterUri} alt={`${exercise.name}动作示范`} />}</div>
+    <div className="motion-player__video-slot">{hasFormalVideo ? <video key={workoutExercise.exerciseId} ref={videoRef} data-exercise-id={workoutExercise.exerciseId} poster={workoutExercise.posterUri} autoPlay={!paused} loop muted playsInline preload="auto" onCanPlay={onReady} onLoadedMetadata={onReady}><source src={videoUri} type={videoUri?.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />{workoutExercise.videoFallbackUri && <source src={workoutExercise.videoFallbackUri} type={workoutExercise.videoFallbackUri.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />}</video> : frameUris.length ? <img key={workoutExercise.exerciseId} src={paused ? workoutExercise.posterUri : frameUris[frameIndex]} alt={motion.accessibility.altText} /> : <img key={workoutExercise.exerciseId} src={workoutExercise.posterUri} alt={`${exercise.name}动作示范`} />}</div>
   </div>
 }
 
 function WorkoutMediaPreloader({ exercises, onReady, onError }: { exercises: WorkoutExerciseV2[]; onReady: () => void; onError: () => void }) {
   const readyIds = useRef(new Set<string>())
+  const readyNotifiedRef = useRef(false)
   const [done, setDone] = useState(false)
   const markReady = (exerciseId: string) => {
     readyIds.current.add(exerciseId)
-    if (readyIds.current.size === exercises.length) {
-      setDone(true)
+    // The first action is the only media gate for the opening cue. Waiting for
+    // all later actions made audio start depend on a slow/offline asset that
+    // was not yet visible. The remaining videos still warm in the background.
+    if (!readyNotifiedRef.current && (exerciseId === exercises[0]?.exerciseId || readyIds.current.size === exercises.length)) {
+      readyNotifiedRef.current = true
       onReady()
     }
+    if (readyIds.current.size === exercises.length) setDone(true)
   }
   if (done) return null
   return <div aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
@@ -885,11 +909,11 @@ function DetailNarration({ exercise }: { exercise: Exercise }) {
   }, [uri])
 
   if (!uri) return null
-  return <section className="detail-narration" aria-label="动作讲解语音"><div><strong>教练动作讲解</strong><small>{audioState === 'blocked' ? '浏览器阻止了自动播放，请点播放' : '进入详情后自动尝试播放'}</small></div><audio ref={audioRef} src={uri} controls preload="metadata" onPlay={() => setAudioState('playing')} onPause={() => setAudioState('idle')} onError={() => setAudioState('blocked')} /></section>
+  return <section className="detail-narration" aria-label="动作讲解语音"><div><strong>教练动作讲解</strong><small>{audioState === 'blocked' ? '浏览器阻止了自动播放，请点播放' : '进入详情后自动尝试播放'}</small></div><audio key={uri} ref={audioRef} src={uri} controls preload="metadata" onPlay={() => setAudioState('playing')} onPause={() => setAudioState('idle')} onError={() => setAudioState('blocked')} /></section>
 }
 
 function DetailScreen({ exercise, backLabel, onBack, onStart, startLabel = '开始 15 分钟跟练', titleId = 'detail-title', cueId = 'detail-cue' }: { exercise: Exercise; backLabel: string; onBack: () => void; onStart: () => void; startLabel?: string; titleId?: string; cueId?: string }) {
-  return <div className="page page-detail"><button className="back-link" onClick={onBack} autoFocus><CaretLeft size={18} aria-hidden="true" />{backLabel}</button><div className="detail-media">{exercise.media.videoUri ? <video src={exercise.media.videoUri} poster={exercise.media.posterUri} controls loop playsInline /> : exercise.media.posterUri ? <img src={exercise.media.posterUri} alt={`${exercise.name}动作海报`} /> : <ActionPoster exercise={exercise} />}<span className="detail-badge">动作解析</span></div><div className={`target-pill target-pill--${exercise.targetTone}`}>{exercise.target}</div><h1 id={titleId}>{exercise.name}</h1><p className="cue-line" id={cueId}>{exercise.cue}</p><DetailNarration exercise={exercise} /><section className="detail-section"><h2>动作步骤</h2><ol>{exercise.steps.map((step) => <li key={step}>{step}</li>)}</ol></section><section className="detail-section detail-section--soft"><h2>呼吸与提醒</h2><p><strong>呼吸：</strong>{exercise.breathing}</p><ul>{exercise.reminders.map((reminder) => <li key={reminder}>{reminder}</li>)}</ul></section><p className="detail-audio-note">训练中自动跟随动作节拍播放数字；完整动作要领和讲解语音在这里查看。</p><button className="primary-button sticky-action" onClick={onStart}><span>{startLabel}</span>{startLabel === '开始 15 分钟跟练' && <ArrowRight size={20} aria-hidden="true" />}</button></div>
+  return <div className="page page-detail"><button className="back-link" onClick={onBack} autoFocus><CaretLeft size={18} aria-hidden="true" />{backLabel}</button><div className="detail-media">{exercise.media.videoUri ? <video key={exercise.id} data-exercise-id={exercise.id} src={exercise.media.videoUri} poster={exercise.media.posterUri} controls loop playsInline /> : exercise.media.posterUri ? <img key={exercise.id} src={exercise.media.posterUri} alt={`${exercise.name}动作海报`} /> : <ActionPoster exercise={exercise} />}<span className="detail-badge">动作解析</span></div><div className={`target-pill target-pill--${exercise.targetTone}`}>{exercise.target}</div><h1 id={titleId}>{exercise.name}</h1><p className="cue-line" id={cueId}>{exercise.cue}</p><DetailNarration exercise={exercise} /><section className="detail-section"><h2>动作步骤</h2><ol>{exercise.steps.map((step) => <li key={step}>{step}</li>)}</ol></section><section className="detail-section detail-section--soft"><h2>呼吸与提醒</h2><p><strong>呼吸：</strong>{exercise.breathing}</p><ul>{exercise.reminders.map((reminder) => <li key={reminder}>{reminder}</li>)}</ul></section><p className="detail-audio-note">训练中自动跟随动作节拍播放数字；完整动作要领和讲解语音在这里查看。</p><button className="primary-button sticky-action" onClick={onStart}><span>{startLabel}</span>{startLabel === '开始 15 分钟跟练' && <ArrowRight size={20} aria-hidden="true" />}</button></div>
 }
 
 function WorkoutDetailOverlay({ exercise, onClose }: { exercise: Exercise; onClose: () => void }) {
@@ -958,8 +982,11 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
     if (mediaReady) return
     setMediaReady(true)
     setMediaFailed(false)
-    clock.start()
   }
+
+  useEffect(() => {
+    if (mediaReady && audioStatus === 'ready' && runtime.state === 'idle') clock.start()
+  }, [audioStatus, clock.start, mediaReady, runtime.state])
 
   const handleOpenDetail = () => {
     if (!canOpenDetail) return
@@ -1015,7 +1042,7 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
         </div>
         <div className="workout-control-pane">
           <button id="workout-detail-trigger" type="button" className="workout-stage__caption workout-stage__caption--button" onClick={handleOpenDetail} disabled={!canOpenDetail} aria-label={canOpenDetail ? '打开动作详情' : captionTitle}><span><span className={`target-pill target-pill--${exercise.targetTone}`}>{isResting ? '恢复呼吸' : exercise.target}</span><strong>{captionTitle}</strong><small>{mediaFailed && runtime.state === 'idle' ? '动作媒体加载失败，请检查网络后重新进入训练。' : captionCue}</small><small className="workout-stage__caption-meta">{captionMeta}</small></span><span className="workout-timer"><strong>{isPreparing ? '—' : String(snapshot.remainingSeconds).padStart(2, '0')}</strong><span>{isPreparing ? '准备' : '秒'}</span></span></button>
-          {audioStatus === 'blocked' && runtime.state !== 'idle' && segment.kind !== 'cooldown' && <button className="audio-enable-button" onClick={onEnableAudio}>声音未开启 · 点此重试</button>}
+          {audioStatus === 'blocked' && runtime.state !== 'completed' && segment.kind !== 'cooldown' && <button className="audio-enable-button" onClick={onEnableAudio}>声音未开启 · 点此重试</button>}
           <div className="workout-live-actions"><button className="secondary-button" onClick={clock.skip} disabled={!canSkip}>{isResting ? '跳过休息' : '跳过'}</button><button className="primary-button" onClick={handlePause} disabled={!canPause}>{runtime.state === 'paused' ? '继续训练' : '暂停训练'}</button></div>
         </div>
       </div>

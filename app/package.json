@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test:pwa": "node --experimental-strip-types --test tools/pwa-static.test.ts",
+    "test:pwa": "node --experimental-strip-types --test tools/pwa-static.test.ts tools/action-media.test.ts",
     "audit:workout-p1": "node --experimental-strip-types tools/generate-workout-p1-audit.mjs",
     "test:workout-app-persistence": "node --experimental-strip-types --test tools/workout-app-persistence-v2.test.ts",
     "test:workout-p1": "pnpm audit:workout-p1 && node --experimental-strip-types --test tools/workout-p1-v2.test.ts && pnpm test:workout-app-persistence",

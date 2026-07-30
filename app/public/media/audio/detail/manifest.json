@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "fitness-action-detail-audio.v1",
+  "status": "personal-preview-objective-pass-subjective-listen-pending",
+  "usageScope": "personal-private-non-commercial-no-redistribution",
+  "voiceRoute": "Qwen3-TTS-12Hz-0.6B-Base exact-reference-text ICL; high-quality route",
+  "actions": [
+    { "exerciseId": "goblet-squat", "uri": "/media/audio/detail/goblet-squat-detail.wav", "sha256": "09ef4078a17c360586f6f03947f2df94cfe4790977d55508c4a57b5e6d1eccca", "sourceStatus": "approved-frozen-detail" },
+    { "exerciseId": "romanian-deadlift", "uri": "/media/audio/detail/romanian-deadlift-detail.wav", "sha256": "efdf5fbdca091e430517f60ad4dae927610f97b881e4edf972158f13b0067b9d", "sourceStatus": "new-objective-pass-candidate" },
+    { "exerciseId": "reverse-lunge", "uri": "/media/audio/detail/reverse-lunge-detail.wav", "sha256": "c1dbecb9089458aee496d183a65a83c113f24fdb664cde5a2c2ccc2d41cfb4be", "sourceStatus": "new-objective-pass-candidate" },
+    { "exerciseId": "glute-bridge", "uri": "/media/audio/detail/glute-bridge-detail.wav", "sha256": "746e1837542b2fa4d952387f2e3b966e832bd1fd3d40fb517816900c75110cae", "sourceStatus": "new-objective-pass-candidate" }
+  ]
+}
