@@ -126,13 +126,13 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
   version: 2,
   title: '15 分钟臀腿跟练',
   displayDurationMinutes: 15,
-  plannedDurationMs: 856_500,
+  plannedDurationMs: 860_000,
   allowedDeviationMs: 30_000,
   // The preparation segment is a short voice-led pre-roll, not a 30-second
   // waiting room.  The first action begins immediately after the 3-2-1 cue.
-  // The approved voice-led intro is about 4.16s at its natural pace. Keep
-  // the segment long enough to finish cleanly before the first action cue.
-  preparationMs: 4_500,
+  // The intro and first action-name cue are queued back-to-back. Reserve
+  // enough time for both phrases before the first rep timeline begins.
+  preparationMs: 8_000,
   transitionRestMs: 20_000,
   roundRestMs: 60_000,
   cooldownMs: 60_000,

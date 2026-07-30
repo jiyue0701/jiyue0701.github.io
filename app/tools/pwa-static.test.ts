@@ -70,7 +70,7 @@ test('index exposes Apple touch icon and standalone metadata', () => {
 
 test('manifest shortcuts describe fixed v2 workout and save-only personal lists', () => {
   const manifestText = readFileSync(join(publicRoot, 'manifest.webmanifest'), 'utf8')
-  assert.match(manifestText, /固定四动作、三轮、约 14:17/)
+  assert.match(manifestText, /固定四动作、三轮、约 14:20/)
   assert.match(manifestText, /整理并保存个人动作清单，不会替代固定跟练计划/)
   assert.doesNotMatch(manifestText, /直接打开当前训练计划/)
 })

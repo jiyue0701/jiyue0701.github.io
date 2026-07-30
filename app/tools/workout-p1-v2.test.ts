@@ -130,8 +130,8 @@ test('P1-CS-03 pause, detail and background freeze active time while wall time c
   runtime = resumeWorkoutRuntime(runtime, 90_000)
   const finished = finishRuntime(runtime, 90_000).runtime
   const session = createCompletedSessionV2({ runtime: finished, plan: guidedWorkoutPlanV2, completedAt: ISO, estimatedCalories: 96 })
-  assert.equal(session.activeElapsedMs, 856_500)
-  assert.equal(session.wallElapsedMs, 906_500)
+  assert.equal(session.activeElapsedMs, 860_000)
+  assert.equal(session.wallElapsedMs, 910_000)
   assert.ok(session.activeElapsedMs < session.wallElapsedMs)
 })
 
@@ -201,11 +201,11 @@ test('P1-PL-01 plan schema covers all counting modes and rejects mixed targets o
   assert.doesNotMatch(canonicalJson(personal), /videoUri|posterUri|countAudioVariants/)
 })
 
-test('P1-PL-02 canonical fixed record resolves to the unchanged 25-segment 856500ms plan', () => {
+test('P1-PL-02 canonical fixed record resolves to the voice-buffered 25-segment 860000ms plan', () => {
   const materialized = materializeWorkoutPlanV2(createFixedWorkoutPlanRecordV2())
   assert.equal(canonicalJson(materialized), canonicalJson(guidedWorkoutPlanV2))
   assert.equal(buildWorkoutSegments(materialized).length, 25)
-  assert.equal(materialized.plannedDurationMs, 856_500)
+  assert.equal(materialized.plannedDurationMs, 860_000)
 })
 
 test('P1-PL-03 all eight preset identities and unknown preset use exact mapping statuses', () => {

@@ -144,7 +144,7 @@ export function createFixedWorkoutPlanRecordV2(): WorkoutPlanRecordV2 {
     version: 2,
     revision: 'fixed-runtime-v2/1',
     title: guidedWorkoutPlanV2.title,
-    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:17。',
+    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:20。',
     source: 'system',
     executionPolicy: 'fixed_entry',
     displayDurationMinutes: guidedWorkoutPlanV2.displayDurationMinutes,

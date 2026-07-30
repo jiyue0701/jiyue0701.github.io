@@ -606,7 +606,7 @@ export const planPresets: TrainingPlan[] = [
   {
     id: 'lower-body-guided-15m-v2',
     title: '15 分钟臀腿跟练',
-    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:17。',
+    subtitle: '4 个核心动作 · 3 轮 · 完整跟练约 14:20。',
     duration: 15,
     rounds: 3,
     estimatedCalories: 96,

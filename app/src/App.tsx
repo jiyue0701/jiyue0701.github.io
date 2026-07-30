@@ -59,6 +59,16 @@ const tabIconComponents = { home: House, plan: ListChecks, calendar: CalendarDot
 const workoutPlanUiContext = { defaultPlan: todayPlan, exerciseCatalog }
 let activeCueAudio: HTMLAudioElement | null = null
 let trainingCueAudio: HTMLAudioElement | null = null
+type QueuedTrainingCue = {
+  uri: string
+  playbackRate: number
+  onStatusChange?: (status: AudioStatus) => void
+}
+type CueResult = 'ended' | 'error' | 'stopped'
+const trainingCueQueue: QueuedTrainingCue[] = []
+let trainingCueGeneration = 0
+let trainingCueDrain: Promise<void> | null = null
+let stopCurrentCue: (() => void) | null = null
 const cueText = ''
 const guidanceAudio = {
   preparation: '/media/audio/guidance/preparation.wav',
@@ -84,8 +94,13 @@ function hydrateStoredPlan(plan: TrainingPlan) {
 function speakCue(_choice: VoiceChoice, _text = '', _useAsset = true, _fallbackUri?: string) {}
 
 function stopActiveCueAudio() {
-  activeCueAudio?.pause()
-  if (activeCueAudio) activeCueAudio.currentTime = 0
+  trainingCueGeneration += 1
+  trainingCueQueue.length = 0
+  stopCurrentCue?.()
+  stopCurrentCue = null
+  const audio = activeCueAudio ?? trainingCueAudio
+  audio?.pause()
+  if (audio) audio.currentTime = 0
   activeCueAudio = null
 }
 
@@ -114,24 +129,67 @@ function primeTrainingAudio() {
   }
 }
 
+async function drainTrainingCueQueue() {
+  if (trainingCueDrain) return trainingCueDrain
+  const generation = trainingCueGeneration
+  trainingCueDrain = (async () => {
+    const audio = getTrainingCueAudio()
+    while (generation === trainingCueGeneration && trainingCueQueue.length) {
+      const cue = trainingCueQueue.shift()
+      if (!cue) break
+      audio.pause()
+      audio.src = cue.uri
+      audio.currentTime = 0
+      audio.playbackRate = cue.playbackRate
+      activeCueAudio = audio
+      const result = await new Promise<CueResult>((resolve) => {
+        let settled = false
+        const settle = (value: CueResult) => {
+          if (settled) return
+          settled = true
+          if (stopCurrentCue === stop) stopCurrentCue = null
+          resolve(value)
+        }
+        const stop = () => settle('stopped')
+        stopCurrentCue = stop
+        audio.onplay = () => cue.onStatusChange?.('ready')
+        audio.onended = () => settle('ended')
+        audio.onerror = () => {
+          cue.onStatusChange?.('blocked')
+          settle('error')
+        }
+        void audio.play().catch(() => {
+          cue.onStatusChange?.('blocked')
+          settle('error')
+        })
+      })
+      if (result !== 'ended') {
+        trainingCueQueue.length = 0
+        break
+      }
+    }
+    if (activeCueAudio === audio) activeCueAudio = null
+  })()
+  try {
+    await trainingCueDrain
+  } finally {
+    trainingCueDrain = null
+    // A segment boundary can stop the previous cue and enqueue the next one
+    // in the same call stack. If that happens while the old promise is still
+    // settling, make sure the newly queued cue gets its own drain pass.
+    if (trainingCueQueue.length) void drainTrainingCueQueue()
+  }
+}
+
+function enqueueTrainingCue(uri: string, choice: VoiceChoice, onStatusChange?: (status: AudioStatus) => void) {
+  trainingCueQueue.push({ uri, playbackRate: choice.playbackRate ?? 1, onStatusChange })
+  void drainTrainingCueQueue()
+}
+
 function speakRepCount(choice: VoiceChoice, count: number, uri?: string, variants: string[] = [], variantIndex = 0, onStatusChange?: (status: AudioStatus) => void) {
   const sources = [uri, ...variants].filter((value): value is string => Boolean(value))
   const selectedUri = sources.length ? sources[variantIndex % sources.length] : undefined
-  if (selectedUri) {
-    const audio = getTrainingCueAudio()
-    audio.pause()
-    audio.src = selectedUri
-    audio.currentTime = 0
-    audio.playbackRate = choice.playbackRate ?? 1
-    activeCueAudio = audio
-    audio.onplay = () => onStatusChange?.('ready')
-    audio.onended = () => { if (activeCueAudio === audio) activeCueAudio = null }
-    audio.onerror = () => {
-      if (activeCueAudio === audio) activeCueAudio = null
-      onStatusChange?.('blocked')
-    }
-    void audio.play().catch(() => audio.onerror?.(new Event('error')))
-  }
+  if (selectedUri) enqueueTrainingCue(selectedUri, choice, onStatusChange)
 }
 
 function speakWorkoutNumber(choice: VoiceChoice, event: WorkoutVoiceEvent, onStatusChange: (status: AudioStatus) => void) {
@@ -147,24 +205,13 @@ function speakWorkoutNumber(choice: VoiceChoice, event: WorkoutVoiceEvent, onSta
 }
 
 function speakGuidance(uri: string, choice: VoiceChoice, onStatusChange: (status: AudioStatus) => void) {
-  const audio = getTrainingCueAudio()
-  audio.pause()
-  audio.src = uri
-  audio.currentTime = 0
-  audio.playbackRate = choice.playbackRate ?? 1
-  activeCueAudio = audio
-  audio.onplay = () => onStatusChange('ready')
-  audio.onended = () => { if (activeCueAudio === audio) activeCueAudio = null }
-  audio.onerror = () => {
-    if (activeCueAudio === audio) activeCueAudio = null
-    onStatusChange('blocked')
-  }
-  void audio.play().catch(() => audio.onerror?.(new Event('error')))
+  enqueueTrainingCue(uri, choice, onStatusChange)
 }
 
 function speakGuidanceForSegment(segment: WorkoutSegment, runtime: WorkoutRuntimeV2, choice: VoiceChoice, onStatusChange: (status: AudioStatus) => void) {
   if (segment.kind === 'preparation') {
     speakGuidance(guidanceAudio.preparation, choice, onStatusChange)
+    speakGuidance(guidanceAudio.actions[0], choice, onStatusChange)
     return
   }
   if (segment.kind === 'transition_rest' || segment.kind === 'round_rest') {
@@ -173,18 +220,16 @@ function speakGuidanceForSegment(segment: WorkoutSegment, runtime: WorkoutRuntim
     return
   }
   if (segment.kind === 'active') {
-    // The first action name follows the opening “准备，3、2、1，开始” cue;
-    // later action names were announced at the start of their short buffer.
-    if (runtime.segmentIndex === 1) {
-      speakGuidance(guidanceAudio.actions[0], choice, onStatusChange)
-    } else {
-      speakGuidance(guidanceAudio.start, choice, onStatusChange)
-    }
+    // The first action name is queued behind the opening cue. Later action
+    // names were announced during their rest buffer, so active starts with a
+    // clean “开始” cue and the first count cannot cut either phrase off.
+    if (runtime.segmentIndex > 1) speakGuidance(guidanceAudio.start, choice, onStatusChange)
   }
 }
 
 async function unlockTrainingAudio(choice: VoiceChoice) {
   if (!choice.audioUri) return false
+  stopActiveCueAudio()
   const audio = getTrainingCueAudio()
   audio.src = choice.audioUri
   audio.preload = 'auto'
@@ -936,23 +981,21 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
     ? <div className="rest-placeholder"><span>{segment.kind === 'cooldown' ? 'COOL DOWN' : 'REST'}</span><strong>{segment.kind === 'cooldown' ? '整理与恢复' : '休息一下'}</strong><small>{segment.kind === 'cooldown' ? '保持轻松呼吸，训练即将完成' : '下一轮即将开始'}</small></div>
     : <MotionPlayer workoutExercise={workoutExercise} exercise={exercise} elapsedMs={isActiveSegment || isPreparing || isTransitionRest ? snapshot.segmentElapsedMs : 0} paused={runtime.state === 'paused' || runtime.state === 'detail'} />
 
-  let primaryValue = isPreparing ? '准备' : String(snapshot.remainingSeconds)
-  let primaryLabel = isPreparing ? '语音引导' : isTransitionRest ? '开始倒计时' : isResting ? '休息倒计时' : '剩余秒数'
-  if (isActiveSegment && workoutExercise.countingMode === 'repetition') {
-    primaryValue = `${runtime.completedCount}/${workoutExercise.targetCount ?? 0}`
-    primaryLabel = '跟练计数'
-  }
-  if (isActiveSegment && workoutExercise.countingMode === 'alternating_pair') {
-    primaryValue = `${runtime.completedCount}/${workoutExercise.targetPerSide ?? 0} 组`
-    primaryLabel = `左 ${runtime.leftCompleted}/${workoutExercise.targetPerSide ?? 0} · 右 ${runtime.rightCompleted}/${workoutExercise.targetPerSide ?? 0}`
-  }
-  if (isActiveSegment && workoutExercise.countingMode === 'timed') {
-    primaryValue = String(snapshot.remainingSeconds)
-    primaryLabel = '剩余秒数'
-  }
-
   const captionTitle = isPreparing ? `第一个动作 · ${exercise.name}` : isTransitionRest ? `下一个动作 · ${exercise.name}` : segment.kind === 'cooldown' ? '整理与恢复' : isResting ? '下一轮准备' : exercise.name
   const captionCue = isPreparing ? '站好位置，3、2、1 后开始。' : isTransitionRest ? '下一个动作准备好，3、2、1 后开始。' : segment.kind === 'cooldown' ? '放松呼吸，让心率逐步恢复。' : exercise.cue
+  const captionMeta = isPreparing
+    ? '语音引导：准备 → 动作名称'
+    : isTransitionRest
+      ? '下一个动作 · 3、2、1 后开始'
+      : segment.kind === 'round_rest'
+        ? '下一轮 · 5、4、3、2、1 后开始'
+        : segment.kind === 'cooldown'
+          ? '整理与恢复'
+          : isActiveSegment && workoutExercise.countingMode === 'repetition'
+            ? `${runtime.completedCount}/${workoutExercise.targetCount ?? 0} 组 · ${exerciseNumber}/${guidedWorkoutPlanV2.exercises.length} 本轮动作`
+            : isActiveSegment && workoutExercise.countingMode === 'alternating_pair'
+              ? `${runtime.completedCount}/${workoutExercise.targetPerSide ?? 0} 组 · ${exerciseNumber}/${guidedWorkoutPlanV2.exercises.length} 本轮动作`
+              : `${exerciseNumber}/${guidedWorkoutPlanV2.exercises.length} 本轮动作`
   const canSkip = (runtime.state === 'active' || runtime.state === 'rest') && segment.kind !== 'cooldown'
   const canPause = runtime.state === 'preparing' || runtime.state === 'active' || runtime.state === 'rest' || runtime.state === 'paused'
 
@@ -971,8 +1014,7 @@ function WorkoutScreenModal({ selectedVoice, audioStatus, detailOpen, onEnableAu
           </div>
         </div>
         <div className="workout-control-pane">
-          <button id="workout-detail-trigger" type="button" className="workout-stage__caption workout-stage__caption--button" onClick={handleOpenDetail} disabled={!canOpenDetail} aria-label={canOpenDetail ? '打开动作详情' : captionTitle}><span><span className={`target-pill target-pill--${exercise.targetTone}`}>{isResting ? '恢复呼吸' : exercise.target}</span><strong>{captionTitle}</strong><small>{mediaFailed && runtime.state === 'idle' ? '动作媒体加载失败，请检查网络后重新进入训练。' : captionCue}</small></span><span className="workout-timer"><strong>{String(snapshot.remainingSeconds).padStart(2, '0')}</strong><span>秒</span></span></button>
-          <div className="workout-live-copy"><div><strong>{primaryValue}</strong><span>{primaryLabel}</span></div><div><strong>{paused ? '暂停' : runtime.state === 'idle' ? '加载' : isPreparing ? '准备' : isResting ? '休息' : '跟练'}</strong><span>当前状态</span></div><div><strong>{exerciseNumber}/{guidedWorkoutPlanV2.exercises.length}</strong><span>本轮动作</span></div></div>
+          <button id="workout-detail-trigger" type="button" className="workout-stage__caption workout-stage__caption--button" onClick={handleOpenDetail} disabled={!canOpenDetail} aria-label={canOpenDetail ? '打开动作详情' : captionTitle}><span><span className={`target-pill target-pill--${exercise.targetTone}`}>{isResting ? '恢复呼吸' : exercise.target}</span><strong>{captionTitle}</strong><small>{mediaFailed && runtime.state === 'idle' ? '动作媒体加载失败，请检查网络后重新进入训练。' : captionCue}</small><small className="workout-stage__caption-meta">{captionMeta}</small></span><span className="workout-timer"><strong>{isPreparing ? '—' : String(snapshot.remainingSeconds).padStart(2, '0')}</strong><span>{isPreparing ? '准备' : '秒'}</span></span></button>
           {audioStatus === 'blocked' && runtime.state !== 'idle' && segment.kind !== 'cooldown' && <button className="audio-enable-button" onClick={onEnableAudio}>声音未开启 · 点此重试</button>}
           <div className="workout-live-actions"><button className="secondary-button" onClick={clock.skip} disabled={!canSkip}>{isResting ? '跳过休息' : '跳过'}</button><button className="primary-button" onClick={handlePause} disabled={!canPause}>{runtime.state === 'paused' ? '继续训练' : '暂停训练'}</button></div>
         </div>

@@ -57,10 +57,15 @@ export function useWorkoutClock(plan: WorkoutPlanV2, options: WorkoutClockOption
     runtimeRef.current = result.runtime
     if (result.segmentChanged) {
       optionsRef.current.onSilence()
+      const previousSegmentEvents = result.voiceEvents.filter((event) => event.segmentIndex < result.runtime.segmentIndex)
+      const nextSegmentEvents = result.voiceEvents.filter((event) => event.segmentIndex >= result.runtime.segmentIndex)
+      for (const event of previousSegmentEvents) optionsRef.current.onVoiceEvent(event)
       optionsRef.current.onSegmentStart?.(result.snapshot.segment, result.runtime)
+      for (const event of nextSegmentEvents) optionsRef.current.onVoiceEvent(event)
+    } else {
+      for (const event of result.voiceEvents) optionsRef.current.onVoiceEvent(event)
     }
     setSnapshot(result.snapshot)
-    for (const event of result.voiceEvents) optionsRef.current.onVoiceEvent(event)
     if (result.runtime.state === 'completed' && !completionNotifiedRef.current) {
       completionNotifiedRef.current = true
       optionsRef.current.onSilence()
