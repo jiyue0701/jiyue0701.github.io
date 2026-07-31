@@ -99,8 +99,8 @@ export const DEFAULT_WORKOUT_RESOURCE_CATALOG_V2: WorkoutResourceCatalogV2 = {
 }
 
 const fixedCounting: Record<string, CountingSpecV2> = {
-  'goblet-squat': { mode: 'repetition', targetCount: 10, cycleDurationMs: 4_000, segmentDurationMs: 40_000 },
-  'romanian-deadlift': { mode: 'repetition', targetCount: 10, cycleDurationMs: 4_000, segmentDurationMs: 40_000 },
+  'goblet-squat': { mode: 'repetition', targetCount: 10, cycleDurationMs: 4_500, segmentDurationMs: 45_000 },
+  'romanian-deadlift': { mode: 'repetition', targetCount: 10, cycleDurationMs: 4_500, segmentDurationMs: 45_000 },
   'reverse-lunge': { mode: 'alternating_pair', targetPerSide: 8, startingSide: 'left', cycleDurationMs: 6_000, segmentDurationMs: 48_000 },
   'glute-bridge': { mode: 'repetition', targetCount: 12, cycleDurationMs: 3_000, segmentDurationMs: 36_000 },
 }

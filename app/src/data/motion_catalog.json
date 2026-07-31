@@ -114,7 +114,7 @@
     "width": 941,
     "height": 1672,
     "fps": 30,
-    "loopDuration": 4.5,
+    "loopDuration": 6.0,
     "loopSeam": {
       "startFrame": 0,
       "endFrame": 5
@@ -167,7 +167,7 @@
     "width": 941,
     "height": 1672,
     "fps": 30,
-    "loopDuration": 3.75,
+    "loopDuration": 3.0,
     "loopSeam": {
       "startFrame": 0,
       "endFrame": 5

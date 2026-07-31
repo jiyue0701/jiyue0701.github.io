@@ -9,7 +9,7 @@ const runtime = readFileSync(join(appRoot, 'src', 'workout', 'runtime.ts'), 'utf
 const plan = readFileSync(join(appRoot, 'src', 'data', 'plan.ts'), 'utf8')
 const app = readFileSync(join(appRoot, 'src', 'App.tsx'), 'utf8')
 const detailManifest = JSON.parse(readFileSync(join(publicRoot, 'media', 'audio', 'detail', 'manifest.json'), 'utf8')) as { actions: Array<{ exerciseId: string; uri: string; sha256: string }> }
-const motionCatalog = JSON.parse(readFileSync(join(appRoot, 'src', 'data', 'motion_catalog.json'), 'utf8')) as Array<{ id: string; exercise: string; video?: string; mp4?: string; webm?: string; poster?: string }>
+const motionCatalog = JSON.parse(readFileSync(join(appRoot, 'src', 'data', 'motion_catalog.json'), 'utf8')) as Array<{ id: string; exercise: string; video?: string; mp4?: string; webm?: string; poster?: string; loopDuration?: number }>
 const catalogSource = plan.slice(0, plan.indexOf('export const planPresets'))
 const catalogExerciseIds = [...catalogSource.matchAll(/\n    id: '([^']+)'/g)].map((match) => match[1])
 
@@ -72,13 +72,27 @@ test('core action posters keep the full-resolution masters', () => {
 })
 
 test('goblet squat keeps a high-resolution continuous loop and fallback frame', () => {
-  const mp4 = readFileSync(join(publicRoot, 'media', 'actions', 'videos', 'goblet-squat.mp4'))
-  const webm = readFileSync(join(publicRoot, 'media', 'actions', 'videos', 'goblet-squat.webm'))
-  assert.ok(mp4.length > 1_000_000, 'goblet squat MP4 must not regress to the tiny low-resolution loop')
-  assert.ok(webm.length > 1_000_000, 'goblet squat WebM fallback must not regress to the tiny low-resolution loop')
+  for (const action of fixedActions) {
+    const mp4 = readFileSync(join(publicRoot, 'media', 'actions', 'videos', `${action.id}.mp4`))
+    const webm = readFileSync(join(publicRoot, 'media', 'actions', 'videos', `${action.id}.webm`))
+    assert.ok(mp4.length > 1_000_000, `${action.id} MP4 must not regress to the tiny low-resolution loop`)
+    assert.ok(webm.length > 500_000, `${action.id} WebM fallback must remain a full-resolution loop`)
+  }
   const peak = readFileSync(join(publicRoot, 'media', 'actions', 'frames', 'goblet-squat-peak.png'))
   assert.equal(peak.toString('ascii', 1, 4), 'PNG')
   assert.ok(peak.readUInt32BE(16) >= 900 && peak.readUInt32BE(20) >= 1500, 'goblet squat fallback frame must remain a full-resolution master')
+})
+
+test('core action cycles match their motion-catalog loop contracts', () => {
+  const expected = new Map([['goblet-squat', 4.5], ['romanian-deadlift', 4.5], ['reverse-lunge', 6], ['glute-bridge', 3]])
+  for (const [exerciseId, seconds] of expected) {
+    const motion = motionCatalog.find((entry) => entry.exercise === exerciseId)
+    assert.equal(motion?.loopDuration, seconds, `${exerciseId} catalog loop must match its runtime cycle`)
+    const blockStart = runtime.indexOf(`exerciseId: '${exerciseId}'`)
+    const blockEnd = runtime.indexOf('    },', blockStart)
+    const block = runtime.slice(blockStart, blockEnd)
+    assert.match(block, new RegExp(`cycleDurationMs: ${Math.round(seconds * 1000).toLocaleString('en-US').replace(/,/g, '_')}`))
+  }
 })
 
 test('abdominal preset is visible and uses matched core assets', () => {

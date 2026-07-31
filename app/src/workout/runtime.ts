@@ -132,9 +132,11 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
   // waiting room.  The first action begins immediately after the 3-2-1 cue.
   // The intro and first action-name cue are queued back-to-back. Reserve
   // enough time for both phrases before the first rep timeline begins.
-  preparationMs: 8_000,
+  preparationMs: 10_000,
   transitionRestMs: 20_000,
-  roundRestMs: 60_000,
+  // Keep the full session at 14:20 after aligning the first two loops to
+  // their actual 4.5s video cycles; the inter-round recovery is 44s.
+  roundRestMs: 44_000,
   cooldownMs: 60_000,
   rounds: 3,
   exercises: [
@@ -142,9 +144,9 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       exerciseId: 'goblet-squat',
       countingMode: 'repetition',
       targetCount: 10,
-      cycleDurationMs: 4_000,
-      segmentDurationMs: 40_000,
-      timelineEvents: buildRepetitionTimeline(10, 4_000),
+      cycleDurationMs: 4_500,
+      segmentDurationMs: 45_000,
+      timelineEvents: buildRepetitionTimeline(10, 4_500),
       videoUri: '/media/actions/videos/goblet-squat.mp4',
       videoFallbackUri: '/media/actions/videos/goblet-squat.webm',
       posterUri: '/media/actions/posters/goblet-squat-poster.png',
@@ -154,9 +156,9 @@ export const guidedWorkoutPlanV2: WorkoutPlanV2 = {
       exerciseId: 'romanian-deadlift',
       countingMode: 'repetition',
       targetCount: 10,
-      cycleDurationMs: 4_000,
-      segmentDurationMs: 40_000,
-      timelineEvents: buildRepetitionTimeline(10, 4_000),
+      cycleDurationMs: 4_500,
+      segmentDurationMs: 45_000,
+      timelineEvents: buildRepetitionTimeline(10, 4_500),
       videoUri: '/media/actions/videos/romanian-deadlift.mp4',
       videoFallbackUri: '/media/actions/videos/romanian-deadlift.webm',
       posterUri: '/media/actions/posters/dumbbell-romanian-deadlift-poster.png',
@@ -512,16 +514,15 @@ export function advanceWorkoutRuntime(runtime: WorkoutRuntimeV2, plan: WorkoutPl
     variantIndex: voiceVariantIndex(next, segments[event.segmentIndex]),
   }))
   const fresh = suppressAudio ? [] : withLateness.filter((event) => event.latenessMs <= AUDIO_FRESHNESS_MS)
-  const selected = fresh[fresh.length - 1]
   for (const event of withLateness) {
-    if (event.eventId === selected?.eventId) announced.add(event.eventId)
+    if (fresh.some((candidate) => candidate.eventId === event.eventId)) announced.add(event.eventId)
     else suppressed.add(event.eventId)
   }
   next.announcedEventIds = [...announced]
   next.suppressedEventIds = [...suppressed]
   snapshot.runtime = next
 
-  return { runtime: next, snapshot, voiceEvents: selected ? [selected] : [], segmentChanged }
+  return { runtime: next, snapshot, voiceEvents: fresh, segmentChanged }
 }
 
 function freezeRuntime(runtime: WorkoutRuntimeV2, plan: WorkoutPlanV2, nowMs: number, state: 'paused' | 'detail', reason?: PauseReason) {
