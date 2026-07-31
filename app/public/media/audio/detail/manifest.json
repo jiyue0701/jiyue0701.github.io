@@ -3,10 +3,199 @@
   "status": "personal-preview-objective-pass-subjective-listen-pending",
   "usageScope": "personal-private-non-commercial-no-redistribution",
   "voiceRoute": "Qwen3-TTS-12Hz-0.6B-Base exact-reference-text ICL; high-quality route",
+  "objectiveGate": "catalog-detail-objective-gate.v1; SenseVoice 24/24 pass; subjective identity and continuity still pending",
   "actions": [
-    { "exerciseId": "goblet-squat", "uri": "/media/audio/detail/goblet-squat-detail.wav", "sha256": "09ef4078a17c360586f6f03947f2df94cfe4790977d55508c4a57b5e6d1eccca", "sourceStatus": "approved-frozen-detail" },
-    { "exerciseId": "romanian-deadlift", "uri": "/media/audio/detail/romanian-deadlift-detail.wav", "sha256": "efdf5fbdca091e430517f60ad4dae927610f97b881e4edf972158f13b0067b9d", "sourceStatus": "new-objective-pass-candidate" },
-    { "exerciseId": "reverse-lunge", "uri": "/media/audio/detail/reverse-lunge-detail.wav", "sha256": "c1dbecb9089458aee496d183a65a83c113f24fdb664cde5a2c2ccc2d41cfb4be", "sourceStatus": "new-objective-pass-candidate" },
-    { "exerciseId": "glute-bridge", "uri": "/media/audio/detail/glute-bridge-detail.wav", "sha256": "746e1837542b2fa4d952387f2e3b966e832bd1fd3d40fb517816900c75110cae", "sourceStatus": "new-objective-pass-candidate" }
+    {
+      "exerciseId": "goblet-squat",
+      "uri": "/media/audio/detail/goblet-squat-detail.wav",
+      "sha256": "09ef4078a17c360586f6f03947f2df94cfe4790977d55508c4a57b5e6d1eccca",
+      "sourceStatus": "approved-frozen-detail"
+    },
+    {
+      "exerciseId": "romanian-deadlift",
+      "uri": "/media/audio/detail/romanian-deadlift-detail.wav",
+      "sha256": "efdf5fbdca091e430517f60ad4dae927610f97b881e4edf972158f13b0067b9d",
+      "sourceStatus": "new-objective-pass-candidate"
+    },
+    {
+      "exerciseId": "reverse-lunge",
+      "uri": "/media/audio/detail/reverse-lunge-detail.wav",
+      "sha256": "c1dbecb9089458aee496d183a65a83c113f24fdb664cde5a2c2ccc2d41cfb4be",
+      "sourceStatus": "new-objective-pass-candidate"
+    },
+    {
+      "exerciseId": "glute-bridge",
+      "uri": "/media/audio/detail/glute-bridge-detail.wav",
+      "sha256": "746e1837542b2fa4d952387f2e3b966e832bd1fd3d40fb517816900c75110cae",
+      "sourceStatus": "new-objective-pass-candidate"
+    },
+    {
+      "exerciseId": "bodyweight-squat",
+      "uri": "/media/audio/detail/bodyweight-squat-detail.wav",
+      "sha256": "1e2b40f8557b3ed9eee618ac55f9f8bb6b2791c05b800a20423d58b50dbe76c3",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.68
+    },
+    {
+      "exerciseId": "bodyweight-glute-bridge",
+      "uri": "/media/audio/detail/bodyweight-glute-bridge-detail.wav",
+      "sha256": "30eb70b110dea4f0ff416907dfb095f1f6d97b15eb5fbc4aaf448b2fed9de7c4",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.78
+    },
+    {
+      "exerciseId": "chair-sit-to-stand",
+      "uri": "/media/audio/detail/chair-sit-to-stand-detail.wav",
+      "sha256": "91a8308f53cbaec1f0bc508f3f9408548208f5963c8ece3ef83403cc94c8a5a5",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 47.64
+    },
+    {
+      "exerciseId": "chair-assisted-split-squat",
+      "uri": "/media/audio/detail/chair-assisted-split-squat-detail.wav",
+      "sha256": "11c378b4890b01a25ab91ef94a5909083373a159fa6d83b504cc6528fc6a25ae",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 44.66
+    },
+    {
+      "exerciseId": "dumbbell-reverse-lunge",
+      "uri": "/media/audio/detail/dumbbell-reverse-lunge-detail.wav",
+      "sha256": "d0a07cf369ad2f3203938f9e5f6f24e1029bd2ef2ed3de04803fd4a29e120927",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 47.78
+    },
+    {
+      "exerciseId": "push-up",
+      "uri": "/media/audio/detail/push-up-detail.wav",
+      "sha256": "2c9f33f67e3e775559e73f394dc54f5c8d9058e85bd0bf7548f15d11f0622e92",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 46.44
+    },
+    {
+      "exerciseId": "dumbbell-floor-press",
+      "uri": "/media/audio/detail/dumbbell-floor-press-detail.wav",
+      "sha256": "e2af5c046ceafc8c490b0e73347d9c76ca9049fa8bf26b77eb96f3aa1f60596d",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 54.14
+    },
+    {
+      "exerciseId": "one-arm-dumbbell-row",
+      "uri": "/media/audio/detail/one-arm-dumbbell-row-detail.wav",
+      "sha256": "913b0200ba57ecb3a44aac500376e1a2d5b648a7bd32584d56fc85fd2fe7b48b",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 53.78
+    },
+    {
+      "exerciseId": "dumbbell-shoulder-press",
+      "uri": "/media/audio/detail/dumbbell-shoulder-press-detail.wav",
+      "sha256": "042d80a9f4bf137989483cfb6ba184e0df1140730b0955bba588a211b3d1efc1",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.88
+    },
+    {
+      "exerciseId": "dumbbell-lateral-raise",
+      "uri": "/media/audio/detail/dumbbell-lateral-raise-detail.wav",
+      "sha256": "0d51b3b06872f3084a69ae40658d059cc14751bec64bffcead789265210d0d92",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52.7
+    },
+    {
+      "exerciseId": "dumbbell-biceps-curl",
+      "uri": "/media/audio/detail/dumbbell-biceps-curl-detail.wav",
+      "sha256": "b322517f1319e5a5731ccaaf5866ca6f1a84c5d33543f14bbbe303ff2c526207",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 50.98
+    },
+    {
+      "exerciseId": "dead-bug",
+      "uri": "/media/audio/detail/dead-bug-detail.wav",
+      "sha256": "06a43d4bef79a06d5052bab8a78c0040ab7841d8ba8f79af3edd426dbc30afe6",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52.48
+    },
+    {
+      "exerciseId": "forearm-plank",
+      "uri": "/media/audio/detail/forearm-plank-detail.wav",
+      "sha256": "ddaffa6b43daeea63428c52bb98fa207e435d2c14f4233e805769a7f39ff1758",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52.08
+    },
+    {
+      "exerciseId": "chair-knee-raise",
+      "uri": "/media/audio/detail/chair-knee-raise-detail.wav",
+      "sha256": "8c07980c1987b6948af736d4346d8f3e8a4914051a1af0ac3713127c1267ca61",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52.54
+    },
+    {
+      "exerciseId": "standing-calf-raise",
+      "uri": "/media/audio/detail/standing-calf-raise-detail.wav",
+      "sha256": "7696ef9ab80d7040aa09b021399514b9ab9a9d6efb8e6a5bdd540d8d62315592",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.52
+    },
+    {
+      "exerciseId": "wall-push-up",
+      "uri": "/media/audio/detail/wall-push-up-detail.wav",
+      "sha256": "ce4a275ae1518c7550eb0d5e413a05eb3d1686a181bf24fd9524c82da78bb356",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.88
+    },
+    {
+      "exerciseId": "chair-supported-hip-abduction",
+      "uri": "/media/audio/detail/chair-supported-hip-abduction-detail.wav",
+      "sha256": "addedf1f4e8c392cee32f95257772cec853d4446ec1f56b9f2b0b870ef4397de",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 51.46
+    },
+    {
+      "exerciseId": "chair-hamstring-curl",
+      "uri": "/media/audio/detail/chair-hamstring-curl-detail.wav",
+      "sha256": "f4ff0c5c265bf9a03ee56593bcfe93a9b4af5b39d228d8aa105ea7b247b44e21",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 44.96
+    },
+    {
+      "exerciseId": "chair-seated-knee-extension",
+      "uri": "/media/audio/detail/chair-seated-knee-extension-detail.wav",
+      "sha256": "6dc2d612f444dad58071a0838525d58792c6f275c1cd93db68df08fcd8c06669",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52
+    },
+    {
+      "exerciseId": "seated-chair-march",
+      "uri": "/media/audio/detail/seated-chair-march-detail.wav",
+      "sha256": "a36f24de8d4222afd2b42b4b7c547d0692ff3bc3b01543ae385afdd9ca908228",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 52.1
+    },
+    {
+      "exerciseId": "dumbbell-bent-over-row",
+      "uri": "/media/audio/detail/dumbbell-bent-over-row-detail.wav",
+      "sha256": "db488b5a4d9d54c66e69b8af2c4dffe73279e1f6a37d1f9cdcc33e35ade14584",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 53.64
+    },
+    {
+      "exerciseId": "dumbbell-farmer-carry",
+      "uri": "/media/audio/detail/dumbbell-farmer-carry-detail.wav",
+      "sha256": "c573d13c40c29ba970a059b9e152fe6a0b4eedb0b6e112c6541cdba8e87b076a",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 54.14
+    },
+    {
+      "exerciseId": "dumbbell-fly",
+      "uri": "/media/audio/detail/dumbbell-fly-detail.wav",
+      "sha256": "c07ef40b66fee08765e8576188044548a479789cd3c1fefc40ffd35ad32e146b",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 53.38
+    },
+    {
+      "exerciseId": "dumbbell-bench-press",
+      "uri": "/media/audio/detail/dumbbell-bench-press-detail.wav",
+      "sha256": "576a32c2a20ff1d79bbd6cc21e8e38c82b7d9fd48a8539da75c4b8cdd5af8f72",
+      "sourceStatus": "new-catalog-objective-pass-candidate",
+      "durationSeconds": 56.22
+    }
   ]
 }

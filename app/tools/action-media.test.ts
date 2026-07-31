@@ -10,6 +10,8 @@ const plan = readFileSync(join(appRoot, 'src', 'data', 'plan.ts'), 'utf8')
 const app = readFileSync(join(appRoot, 'src', 'App.tsx'), 'utf8')
 const detailManifest = JSON.parse(readFileSync(join(publicRoot, 'media', 'audio', 'detail', 'manifest.json'), 'utf8')) as { actions: Array<{ exerciseId: string; uri: string; sha256: string }> }
 const motionCatalog = JSON.parse(readFileSync(join(appRoot, 'src', 'data', 'motion_catalog.json'), 'utf8')) as Array<{ id: string; exercise: string; video?: string; mp4?: string; webm?: string; poster?: string }>
+const catalogSource = plan.slice(0, plan.indexOf('export const planPresets'))
+const catalogExerciseIds = [...catalogSource.matchAll(/\n    id: '([^']+)'/g)].map((match) => match[1])
 
 const fixedActions = [
   { id: 'goblet-squat', poster: 'goblet-squat-poster.png' },
@@ -32,17 +34,66 @@ test('fixed workout keeps one-to-one action media mapping', () => {
 })
 
 test('fixed workout exposes complete action-detail narration coverage', () => {
-  assert.deepEqual(detailManifest.actions.map((item) => item.exerciseId), fixedActions.map((item) => item.id))
+  assert.equal(detailManifest.actions.length, catalogExerciseIds.length)
+  assert.deepEqual(new Set(detailManifest.actions.map((item) => item.exerciseId)), new Set(catalogExerciseIds))
   for (const action of fixedActions) {
     const uri = `/media/audio/detail/${action.id}-detail.wav`
     assert.equal(existsSync(join(publicRoot, uri.slice(1))), true, `${uri} must be bundled`)
     assert.match(plan, new RegExp(`actionMedia\\('${action.id}',[^\\n]+${action.id}-detail\\.wav`), `${action.id} must declare its detail narration URI`)
     assert.equal(detailManifest.actions.find((item) => item.exerciseId === action.id)?.uri, uri)
   }
+  for (const exerciseId of catalogExerciseIds.filter((id) => !fixedActions.some((action) => action.id === id))) {
+    const uri = `/media/audio/detail/${exerciseId}-detail.wav`
+    assert.equal(existsSync(join(publicRoot, uri.slice(1))), true, `${uri} must be bundled`)
+    assert.ok(plan.includes(`assetMedia('${exerciseId}')`) || plan.includes(`actionMedia('${exerciseId}',`), `${exerciseId} must resolve its detail narration URI`)
+    assert.equal(detailManifest.actions.find((item) => item.exerciseId === exerciseId)?.uri, uri)
+  }
+})
+
+test('core action posters keep the full-resolution masters', () => {
+  const posterFiles = [
+    'goblet-squat-poster.png',
+    'dumbbell-romanian-deadlift-poster.png',
+    'reverse-lunge-poster.png',
+    'dumbbell-glute-bridge-poster.png',
+    'bodyweight-squat-poster.png',
+    'bodyweight-glute-bridge-poster.png',
+    'chair-sit-to-stand-poster.png',
+    'chair-assisted-split-squat-poster.png',
+    'dumbbell-reverse-lunge-poster.png',
+  ]
+  for (const file of posterFiles) {
+    const bytes = readFileSync(join(publicRoot, 'media', 'actions', 'posters', file))
+    assert.equal(bytes.toString('ascii', 1, 4), 'PNG', `${file} must remain a PNG master`)
+    const width = bytes.readUInt32BE(16)
+    const height = bytes.readUInt32BE(20)
+    assert.ok(width >= 900 && height >= 1500, `${file} must not regress to the 360×640 preview`)
+  }
+})
+
+test('goblet squat keeps a high-resolution continuous loop and fallback frame', () => {
+  const mp4 = readFileSync(join(publicRoot, 'media', 'actions', 'videos', 'goblet-squat.mp4'))
+  const webm = readFileSync(join(publicRoot, 'media', 'actions', 'videos', 'goblet-squat.webm'))
+  assert.ok(mp4.length > 1_000_000, 'goblet squat MP4 must not regress to the tiny low-resolution loop')
+  assert.ok(webm.length > 1_000_000, 'goblet squat WebM fallback must not regress to the tiny low-resolution loop')
+  const peak = readFileSync(join(publicRoot, 'media', 'actions', 'frames', 'goblet-squat-peak.png'))
+  assert.equal(peak.toString('ascii', 1, 4), 'PNG')
+  assert.ok(peak.readUInt32BE(16) >= 900 && peak.readUInt32BE(20) >= 1500, 'goblet squat fallback frame must remain a full-resolution master')
+})
+
+test('abdominal preset is visible and uses matched core assets', () => {
+  assert.match(plan, /id: 'core-shredder-foundation-v0-1'/)
+  for (const exerciseId of ['dead-bug', 'forearm-plank', 'chair-knee-raise', 'seated-chair-march']) {
+    assert.match(plan, new RegExp(`'${exerciseId}'`), `${exerciseId} must be part of the catalog`)
+    assert.ok(existsSync(join(publicRoot, 'media', 'actions', 'posters', `${exerciseId}-poster.png`)))
+    assert.ok(existsSync(join(publicRoot, 'media', 'actions', 'videos', `${exerciseId}.mp4`)))
+  }
 })
 
 test('workout player remounts media when the exercise changes', () => {
   assert.match(app, /<video key=\{workoutExercise\.exerciseId\}/)
   assert.match(app, /data-exercise-id=\{workoutExercise\.exerciseId\}/)
+  assert.match(app, /motion-player__video-slot--landscape/)
+  assert.match(readFileSync(join(appRoot, 'src', 'styles.css'), 'utf8'), /motion-player__video-slot > video[^\n]*object-fit: contain/)
   assert.match(app, /mediaReady && audioStatus === 'ready' && runtime\.state === 'idle'/)
 })

@@ -70,17 +70,18 @@ const assetMedia = (exerciseId?: string) => ({
   coachingAudio: {
     countUris: Array.from({ length: 40 }, (_, index) => `/media/audio/count-low-${String(index + 1).padStart(2, '0')}.wav`),
     countVariants: Array.from({ length: 40 }, (_, index) => [`/media/audio/count-low-${String(index + 1).padStart(2, '0')}-v2.wav`]),
+    tipUri: exerciseId ? `/media/audio/detail/${exerciseId}-detail.wav` : undefined,
   },
 })
 const squatMedia = actionMedia('goblet-squat', 4.5, '/media/audio/detail/goblet-squat-detail.wav')
-const bodyweightSquatMedia = actionMedia('bodyweight-squat', 3.75)
-const bodyweightGluteBridgeMedia = actionMedia('bodyweight-glute-bridge', 3.75)
+const bodyweightSquatMedia = actionMedia('bodyweight-squat', 3.75, '/media/audio/detail/bodyweight-squat-detail.wav')
+const bodyweightGluteBridgeMedia = actionMedia('bodyweight-glute-bridge', 3.75, '/media/audio/detail/bodyweight-glute-bridge-detail.wav')
 const reverseLungeMedia = actionMedia('reverse-lunge', 4.5, '/media/audio/detail/reverse-lunge-detail.wav')
-const chairSitToStandMedia = actionMedia('chair-sit-to-stand', 4.5)
-const chairAssistedSplitSquatMedia = actionMedia('chair-assisted-split-squat', 5.625)
+const chairSitToStandMedia = actionMedia('chair-sit-to-stand', 4.5, '/media/audio/detail/chair-sit-to-stand-detail.wav')
+const chairAssistedSplitSquatMedia = actionMedia('chair-assisted-split-squat', 5.625, '/media/audio/detail/chair-assisted-split-squat-detail.wav')
 const dumbbellRomanianDeadliftMedia = actionMedia('romanian-deadlift', 4.5, '/media/audio/detail/romanian-deadlift-detail.wav')
 const dumbbellGluteBridgeMedia = actionMedia('glute-bridge', 3.75, '/media/audio/detail/glute-bridge-detail.wav')
-const dumbbellReverseLungeMedia = actionMedia('dumbbell-reverse-lunge', 5.625)
+const dumbbellReverseLungeMedia = actionMedia('dumbbell-reverse-lunge', 5.625, '/media/audio/detail/dumbbell-reverse-lunge-detail.wav')
 
 export const exerciseCatalog: Exercise[] = [
   {
@@ -279,7 +280,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要让哑铃相互碰撞。', '腰背自然贴地，不要过度拱腰。', '肩部不适时缩小幅度。'],
     videoLabel: '上肢完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-floor-press'),
   },
   {
     id: 'one-arm-dumbbell-row',
@@ -333,7 +334,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要借助摆动。', '不要把动作做成耸肩。', '重量不足以保持轨迹时应减小重量。'],
     videoLabel: '肩部完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-lateral-raise'),
   },
   {
     id: 'dumbbell-biceps-curl',
@@ -351,7 +352,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要前后摆动身体。', '肩膀保持放松。', '两侧次数一致。'],
     videoLabel: '手臂完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-biceps-curl'),
   },
   {
     id: 'dead-bug',
@@ -369,7 +370,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['腰背拱起时缩小伸展幅度。', '不要用惯性甩动四肢。', '保持下巴微收。'],
     videoLabel: '核心完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dead-bug'),
   },
   {
     id: 'forearm-plank',
@@ -387,7 +388,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['腰部不适时立即停止。', '质量优先于坚持时间。', '肩膀不要耸起。'],
     videoLabel: '核心完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('forearm-plank'),
   },
   {
     id: 'chair-knee-raise',
@@ -405,7 +406,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要把体重压在椅背上。', '髋部不要左右晃动。', '抬不到髋高时保持可控幅度。'],
     videoLabel: '核心完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('chair-knee-raise'),
   },
   {
     id: 'standing-calf-raise',
@@ -423,7 +424,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要向外翻脚踝。', '不要弹震。', '平衡不足时使用固定支撑。'],
     videoLabel: '小腿完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('standing-calf-raise'),
   },
   {
     id: 'wall-push-up',
@@ -441,7 +442,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['椅子或墙面必须稳定。', '不要塌腰或探头。', '动作轻松后再逐步增加站立距离。'],
     videoLabel: '胸部完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('wall-push-up'),
   },
   {
     id: 'chair-supported-hip-abduction',
@@ -459,7 +460,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要侧倾身体代偿。', '髋部保持正对前方。', '椅子必须靠墙固定。'],
     videoLabel: '髋稳定完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('chair-supported-hip-abduction'),
   },
   {
     id: 'chair-hamstring-curl',
@@ -477,7 +478,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要用腰部甩动。', '保持支撑脚稳定。', '两侧幅度和次数一致。'],
     videoLabel: '腿后侧完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('chair-hamstring-curl'),
   },
   {
     id: 'chair-seated-knee-extension',
@@ -495,7 +496,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['椅子不要滑动。', '不要用身体后仰借力。', '膝盖不适时缩小幅度。'],
     videoLabel: '大腿前侧完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('chair-seated-knee-extension'),
   },
   {
     id: 'seated-chair-march',
@@ -513,7 +514,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要用手拉腿。', '骨盆不要左右摇摆。', '腰背疲劳时缩小抬膝高度。'],
     videoLabel: '核心完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('seated-chair-march'),
   },
   {
     id: 'dumbbell-bent-over-row',
@@ -531,7 +532,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['不要弓背或耸肩。', '不要靠甩动完成最后几次。', '腰背不适时提高躯干角度。'],
     videoLabel: '背部完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-bent-over-row'),
   },
   {
     id: 'dumbbell-farmer-carry',
@@ -549,7 +550,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['行走路线要清空。', '不要向一侧倾斜。', '握力下降或姿态失稳时立即停止。'],
     videoLabel: '核心完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-farmer-carry'),
   },
   {
     id: 'dumbbell-fly',
@@ -567,7 +568,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['肩胛骨保持稳定贴地。', '动作范围以肩部无痛为准。', '不要借助摆动完成。'],
     videoLabel: '胸部完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-fly'),
   },
   {
     id: 'dumbbell-bench-press',
@@ -585,7 +586,7 @@ export const exerciseCatalog: Exercise[] = [
     reminders: ['训练凳必须稳定，周围留出空间。', '不要让哑铃相互碰撞。', '肩部不适时立即停止并缩小幅度。'],
     videoLabel: '胸部完整动作视频',
     videoStatus: 'approved',
-    media: assetMedia(),
+    media: assetMedia('dumbbell-bench-press'),
   },]
 
 // All catalog actions now resolve to an approved, pre-rendered 30 FPS asset.
@@ -665,13 +666,13 @@ export const planPresets: TrainingPlan[] = [
   },
   {
     id: 'core-shredder-foundation-v0-1',
-    title: '核心燃脂 · 腹部基础',
-    subtitle: '死虫式、平板支撑和抬膝，先练腹部控制与稳定。',
-    duration: 10,
+    title: '腹部核心 · 12 分钟',
+    subtitle: '借鉴经典腹部循环：屈髋控制、抗伸展与交替抬膝。',
+    duration: 12,
     rounds: 2,
-    estimatedCalories: 60,
+    estimatedCalories: 72,
     source: 'preset',
-    exercises: exerciseCatalog.filter((exercise) => ['dead-bug', 'forearm-plank', 'chair-knee-raise'].includes(exercise.id)),
+    exercises: exerciseCatalog.filter((exercise) => ['dead-bug', 'forearm-plank', 'chair-knee-raise', 'seated-chair-march'].includes(exercise.id)),
   },
   {
     id: 'full-body-foundation-v0-1',
